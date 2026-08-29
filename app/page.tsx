@@ -306,15 +306,7 @@ export default function Home() {
     <div className="absolute top-1/4 -right-1/4 h-[600px] w-[600px] rounded-full bg-[#5b93e6]/5 blur-[120px]" />
     <div className="absolute bottom-1/4 -left-1/4 h-[500px] w-[500px] rounded-full bg-[#3f7d52]/5 blur-[120px]" />
   </motion.div>
-<div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden">
-  <Image 
-    src="/Carpet.png" 
-    alt="سجادة تراثية" 
-    fill
-    priority 
-    className="object-contain object-left opacity-50"
-  />
-</div>
+
   <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-6 py-20 lg:grid-cols-[1.15fr_0.85fr]">
     
     {/* النص - مع أنيميشن */}
