@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 import { saudiFont, ibmPlexArabic } from "./fonts";
 
-// ---------- بيانات الموقع (عدّلها بمعلوماتك) ----------
+
 
 const NAV = [
   { id: "about", label: "نبذة" },
@@ -236,7 +236,7 @@ export default function Home() {
       <header className="fixed top-0 z-50 w-full border-b border-white/5 bg-[#0a1f1c]/85 backdrop-blur-xl">
         <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <a href="#hero" className="flex items-center gap-4">
-            <Image src="/logo.png" alt="فهد الفهيد" width={44} height={44} className="rounded-lg" />
+            <Image src="/logo.png" alt="فهد الفهيد" width={120} height={100} className="rounded-lg" />
             <span className={`${saudiFont.className} text-xl font-black tracking-wide`}>
               <span className="text-white">فهد</span>
               <span className="mr-2 bg-gradient-to-l from-[#5b93e6] to-[#3f7d52] bg-clip-text text-transparent">
@@ -307,8 +307,21 @@ export default function Home() {
     <div className="absolute bottom-1/4 -left-1/4 h-[500px] w-[500px] rounded-full bg-[#3f7d52]/5 blur-[120px]" />
   </motion.div>
 
-  <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-6 py-20 lg:grid-cols-[1.15fr_0.85fr]">
-    
+  {/* السجادة - خلفية باهتة، ما تنافس النص */}
+  <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden">
+    <Image
+      src="/Carpet.png"
+      alt=""
+      fill
+      priority
+      className="object-left opacity-[0.9] md:opacity-[0.42] lg:opacity-[0.8]"
+    />
+  </div>
+
+  {/* طبقة تعتيم خفيفة لضمان وضوح النص فوق السجادة */}
+  <div className="pointer-events-none absolute inset-0 z-[1] bg-[#0a1f1c]/60" />
+
+  <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-12 px-6 py-20 lg:grid-cols-[1.15fr_0.85fr]">
     {/* النص - مع أنيميشن */}
     <motion.div
       initial={{ opacity: 0, x: -30 }}
@@ -338,15 +351,15 @@ export default function Home() {
       </motion.h1>
       
       <motion.p 
-        className="mt-6 max-w-xl text-lg leading-relaxed text-white/65"
+        className="mt-6 max-w-xl text-lg leading-relaxed text-white/95"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.6 }}
       >
         مهندس برمجيات ومحلل بيانات، حاصل على شهادة{" "}
-        <span className="font-semibold text-[#5b93e6]">CAPM®</span>{" "}
-        — أبني تطبيقات ويب حديثة وأصمم لوحات معلومات{" "}
-        <span className="font-semibold text-[#3f7d52]">Power BI</span>{" "}
+        <span className="font-semibold text-[#ffffff]">CAPM®</span>{" "}
+         أبني تطبيقات ويب حديثة وأصمم لوحات معلومات{" "}
+        <span className="font-semibold text-[#ffffff]">Power BI</span>{" "}
         تحوّل البيانات إلى قرارات.
       </motion.p>
 
@@ -373,20 +386,20 @@ export default function Home() {
       </motion.div>
 
       <motion.div 
-        className="mt-10 flex items-center gap-4 text-sm text-white/50"
+        className="mt-10 flex items-center gap-4 text-sm text-white/90"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6, duration: 0.5 }}
       >
         <span className="flex items-center gap-1.5">
-          <MapPin size={15} className="text-[#5b93e6]" />
+          <MapPin size={15} className="text-[#ffffff]" />
           الرياض، السعودية
         </span>
         <span className="h-1 w-1 rounded-full bg-white/30" />
         <span className="flex items-center gap-1.5">
           <span className="relative flex h-2 w-2">
-            <span className="absolute h-full w-full animate-ping rounded-full bg-[#3f7d52] opacity-60" />
-            <span className="relative h-2 w-2 rounded-full bg-[#3f7d52]" />
+            <span className="absolute h-full w-full animate-ping rounded-full bg-[#ffffff] opacity-70" />
+            <span className="relative h-2 w-2 rounded-full bg-[#28c958]" />
           </span>
           متاح للعمل
         </span>
