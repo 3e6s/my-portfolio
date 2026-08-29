@@ -53,7 +53,7 @@ const LINKS = {
 const STATS = [
   { value: "+6", label: "مشاريع تقنية" },
   { value: "CAPM®", label: "شهادة معتمدة" },
-  { value: "Year 1", label: "الخبرة سنة واحدة تدريبية" },
+  { value: "1Year", label: "الخبرة سنة واحدة تدريبية" },
 ];
 
 const SKILL_CATEGORIES = [
@@ -336,8 +336,15 @@ export default function Home() {
       >
         <Sparkles size={16} />
         أهلاً بك في معرض أعمالي
+        <span className="flex items-center gap-1.5">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute h-full w-full animate-ping rounded-full bg-[#ffffff] opacity-70" />
+            <span className="relative h-2 w-2 rounded-full bg-[#d00000]" />
+          </span>
+          الموقع تحت التحسين 
+        </span>
       </motion.p>
-      
+              
       <motion.h1 
         className={`${saudiFont.className} flex flex-wrap items-baseline gap-3 text-5xl font-black leading-[1.15] md:text-7xl`}
         initial={{ opacity: 0, y: 20 }}
@@ -593,13 +600,13 @@ export default function Home() {
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.6, delay: 0.4 }}
       >
-        مهندس برمجيات سعودي، خريج هندسة برمجية بمرتبة الشرف. أجمع بين
-        التطوير البرمجي وتحليل البيانات لتقديم حلول تقنية ذات أثر
+        مهندس برمجيات سعودي، خريج بكالوريوس هندسة برمجيات بتقدير ممتاز مع مرتبة الشرف الثانية وايضا حاصل على شهادة الدبلوم في تقنية شبكات الحاسب. أجمع بين
+        التطوير البرمجي وتحليل البيانات وايضا تطوير الأعمال لتقديم حلول تقنية ذات أثر
         حقيقي — من بناء التطبيقات إلى تصميم لوحات المعلومات التنفيذية.
         <br />
         <br />
-        حاصل على شهادة CAPM® المعتمدة من PMI، وأمتلك خبرة عملية في
-        إدارة المشاريع الرقمية ضمن فرق تقنية متعددة التخصصات.
+        حاصل على شهادة CAPM® المعتمدة من PMI، وأمتلك خبرة تدريبية في
+        إدارة المشاريع التقنية وإدارة حوكمة التكنولوجيا.
       </motion.p>
     </div>
   </div>
