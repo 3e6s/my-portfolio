@@ -1,0 +1,93 @@
+<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#173a78"/>
+      <stop offset="100%" stop-color="#0a1f1c"/>
+    </linearGradient>
+    <linearGradient id="barBlue" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#2454a4"/>
+      <stop offset="100%" stop-color="#5b93e6"/>
+    </linearGradient>
+    <linearGradient id="barGreen" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#2f5e3f"/>
+      <stop offset="100%" stop-color="#3f7d52"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#5b93e6" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#5b93e6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- خلفية -->
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <circle cx="400" cy="120" r="260" fill="url(#glow)"/>
+
+  <!-- شبكة زخرفية خفيفة -->
+  <g opacity="0.06" stroke="#5b93e6" stroke-width="1">
+    <line x1="0" y1="90" x2="800" y2="90"/>
+    <line x1="0" y1="180" x2="800" y2="180"/>
+    <line x1="0" y1="270" x2="800" y2="270"/>
+    <line x1="0" y1="360" x2="800" y2="360"/>
+  </g>
+
+  <!-- بطاقة اللوحة الرئيسية -->
+  <rect x="60" y="60" width="680" height="330" rx="20" fill="#0b1d15" fill-opacity="0.55" stroke="#ffffff" stroke-opacity="0.08"/>
+
+  <!-- شريط علوي بمؤشرات KPI -->
+  <g>
+    <rect x="90" y="90" width="180" height="64" rx="12" fill="#ffffff" fill-opacity="0.05"/>
+    <circle cx="115" cy="122" r="6" fill="#5b93e6"/>
+    <text x="135" y="112" fill="#ffffff" fill-opacity="0.9" font-family="Arial" font-size="22" font-weight="700">950+</text>
+    <text x="135" y="134" fill="#ffffff" fill-opacity="0.5" font-family="Arial" font-size="12">سجل موظف</text>
+
+    <rect x="290" y="90" width="180" height="64" rx="12" fill="#ffffff" fill-opacity="0.05"/>
+    <circle cx="315" cy="122" r="6" fill="#3f7d52"/>
+    <text x="335" y="112" fill="#ffffff" fill-opacity="0.9" font-family="Arial" font-size="22" font-weight="700">30+</text>
+    <text x="335" y="134" fill="#ffffff" fill-opacity="0.5" font-family="Arial" font-size="12">مصدر بيانات</text>
+
+    <rect x="490" y="90" width="180" height="64" rx="12" fill="#ffffff" fill-opacity="0.05"/>
+    <circle cx="515" cy="122" r="6" fill="#f2b134"/>
+    <text x="535" y="112" fill="#ffffff" fill-opacity="0.9" font-family="Arial" font-size="22" font-weight="700">2</text>
+    <text x="535" y="134" fill="#ffffff" fill-opacity="0.5" font-family="Arial" font-size="12">لوحات متكاملة</text>
+  </g>
+
+  <!-- مخطط أعمدة -->
+  <g>
+    <rect x="90" y="290" width="28" height="70" rx="4" fill="url(#barBlue)"/>
+    <rect x="130" y="250" width="28" height="110" rx="4" fill="url(#barGreen)"/>
+    <rect x="170" y="270" width="28" height="90" rx="4" fill="url(#barBlue)"/>
+    <rect x="210" y="230" width="28" height="130" rx="4" fill="url(#barGreen)"/>
+    <rect x="250" y="300" width="28" height="60" rx="4" fill="url(#barBlue)"/>
+    <rect x="290" y="255" width="28" height="105" rx="4" fill="url(#barGreen)"/>
+    <rect x="330" y="280" width="28" height="80" rx="4" fill="url(#barBlue)"/>
+  </g>
+
+  <!-- خط بياني -->
+  <polyline points="420,340 460,300 500,320 540,270 580,290 620,240 660,260"
+    fill="none" stroke="#5b93e6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="#5b93e6">
+    <circle cx="420" cy="340" r="5"/>
+    <circle cx="460" cy="300" r="5"/>
+    <circle cx="500" cy="320" r="5"/>
+    <circle cx="540" cy="270" r="5"/>
+    <circle cx="580" cy="290" r="5"/>
+    <circle cx="620" cy="240" r="5"/>
+    <circle cx="660" cy="260" r="5"/>
+  </g>
+
+  <!-- دائرة مؤشر دائري (نسبة إنجاز) -->
+  <g transform="translate(700,320)">
+    <circle r="42" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="10"/>
+    <circle r="42" fill="none" stroke="#3f7d52" stroke-width="10"
+      stroke-dasharray="210 264" stroke-linecap="round" transform="rotate(-90)"/>
+    <text x="0" y="6" text-anchor="middle" fill="#ffffff" font-family="Arial" font-size="18" font-weight="700">80%</text>
+  </g>
+
+  <!-- شعار Power BI مصغر -->
+  <g transform="translate(600,95)" opacity="0.85">
+    <rect x="0" y="18" width="10" height="20" rx="2" fill="#f2b134"/>
+    <rect x="14" y="10" width="10" height="28" rx="2" fill="#f2b134"/>
+    <rect x="28" y="0" width="10" height="38" rx="2" fill="#f2b134"/>
+    <text x="46" y="26" fill="#ffffff" fill-opacity="0.7" font-family="Arial" font-size="14" font-weight="600">Power BI</text>
+  </g>
+</svg>

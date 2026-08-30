@@ -28,8 +28,24 @@ import {
   Mail,
   Phone,
   Globe,
-  
 } from "lucide-react";
+
+// أيقونات مخصصة (lucide-react شالت أيقونات العلامات التجارية)
+function GithubIcon({ size = 17 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.14c-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.75 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.73.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .3.21.66.79.55A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/>
+    </svg>
+  );
+}
+
+function LinkedinIcon({ size = 17 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/>
+    </svg>
+  );
+}
 import { saudiFont, ibmPlexArabic } from "./fonts";
 
 
@@ -135,6 +151,7 @@ const PROJECTS = [
     tags: ["C#", "ASP.NET Core", "OpenAI"],
     year: "2025",
     gradient: "from-[#2454a4] to-[#173a78]",
+    Image: "/PerformX3.png",
   },
   {
     title: "بوابة BI التنفيذية",
@@ -142,6 +159,7 @@ const PROJECTS = [
     tags: ["Power BI", "DAX", "SQL"],
     year: "2025",
     gradient: "from-[#3f7d52] to-[#2f5e3f]",
+    Image: "/bi-portal.svg",
   },
   {
     title: "QassimPay — منصة مصرفية رقمية",
@@ -149,6 +167,7 @@ const PROJECTS = [
     tags: ["C#", "ASP.NET Core MVC", "SQL Server"],
     year: "2024",
     gradient: "from-[#5b93e6] to-[#2454a4]",
+    Image: "/QassimPay.jpg",
   },
   {
     title: "WSA34 — كأس العالم السعودية 2034",
@@ -156,6 +175,7 @@ const PROJECTS = [
     tags: ["C#", "Web App"],
     year: "2024",
     gradient: "from-[#6b7d52] to-[#3f5e2f]",
+    Image: "/2WSA34.png",
   },
   {
     title: "بوت البريد الجماعي",
@@ -163,6 +183,7 @@ const PROJECTS = [
     tags: ["C#", "Desktop", "Automation"],
     year: "2023",
     gradient: "from-[#173a78] to-[#0a1f1c]",
+    Image: "/mail-bot.svg",
   },
   {
     title: "TODO — متتبع المهام",
@@ -170,6 +191,7 @@ const PROJECTS = [
     tags: ["C#", "CRUD"],
     year: "2023",
     gradient: "from-[#2454a4] to-[#3f7d52]",
+    Image: "/TODO.png",
   },
 ];
 
@@ -338,7 +360,7 @@ export default function Home() {
         أهلاً بك في معرض أعمالي
         <span className="flex items-center gap-1.5">
           <span className="relative flex h-2 w-2">
-            <span className="absolute h-full w-full animate-ping rounded-full bg-[#ffffff] opacity-70" />
+            <span className="absolute h-full w-full animate-ping rounded-full bg-[#ff0000] opacity-90" />
             <span className="relative h-2 w-2 rounded-full bg-[#d00000]" />
           </span>
           الموقع تحت التحسين 
@@ -581,6 +603,16 @@ export default function Home() {
           ease: "easeInOut",
         }}
       >
+
+          <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden">
+            <Image
+              src="/Sword.png"
+              alt=""
+              fill
+              priority
+              className="object-left opacity-[0.9] md:opacity-[0.42] lg:opacity-[0.8]"
+            />
+          </div>
         <Image
           src="/profile.png"
           alt="فهد الفهيد"
@@ -607,8 +639,11 @@ export default function Home() {
         <br />
         حاصل على شهادة CAPM® المعتمدة من PMI، وأمتلك خبرة تدريبية في
         إدارة المشاريع التقنية وإدارة حوكمة التكنولوجيا.
+        
       </motion.p>
+      
     </div>
+    
   </div>
 
   {/* بطاقات المهارات */}
@@ -712,6 +747,15 @@ export default function Home() {
                 className="group overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] transition duration-300 hover:-translate-y-1.5 hover:border-white/20"
               >
                 <div className={`relative flex h-44 items-end bg-gradient-to-br ${p.gradient} p-4`}>
+                                    {p.Image && (
+                    <Image
+                      src={p.Image}
+                      alt={p.title}
+                      fill
+                      className="object-cover transition duration-300 group-hover:scale-105"
+                    />
+                  )}
+
                   <span className="rounded-full bg-black/30 px-3 py-1 text-xs font-bold text-white backdrop-blur">
                     {p.year}
                   </span>
@@ -763,7 +807,7 @@ export default function Home() {
         </Section>
 
         {/* ===== Contact ===== */}
-        <Section id="contact" icon={MessageSquare} title="لنصنع شيئاً رائعاً" subtitle="تواصل معي">
+             <Section id="contact" icon={MessageSquare} title="لنصنع شيئاً رائعاً" subtitle="تواصل معي">
           <div className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-l from-[#173a78]/40 to-[#0b1d15]">
             <div className="grid gap-8 p-8 md:p-12 lg:grid-cols-[1fr_auto]">
               <div>
@@ -777,7 +821,25 @@ export default function Home() {
                   متاح للعمل الحر والفرص الوظيفية. راسلني على البريد أو تواصل
                   معي مباشرة وسأرد عليك في أقرب وقت.
                 </p>
-         
+
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <a
+                    href={LINKS.linkedin}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm transition hover:border-[#5b93e6]/50 hover:text-[#5b93e6]"
+                  >
+                    <LinkedinIcon /> LinkedIn
+                  </a>
+                  <a
+                    href={LINKS.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm transition hover:border-white/40 hover:text-white"
+                  >
+                    <GithubIcon /> GitHub
+                  </a>
+                </div>
               </div>
               <div className="flex flex-col justify-center gap-4">
                 <a
@@ -794,6 +856,7 @@ export default function Home() {
                   href={`tel:${LINKS.phone}`}
                   className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-6 py-4 transition hover:border-[#5b93e6]/40"
                 >
+                
                   <Phone size={20} className="text-[#5b93e6]" />
                   <div>
                     <p className="text-xs text-white/45">الجوال</p>
