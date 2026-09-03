@@ -1,17 +1,8 @@
 "use client";
-
-// ============================================================
-//  فهد الفهيد — Portfolio (single-file, copy & paste)
-//  Next.js App Router — app/page.tsx
-//  Dark teal + green/blue Saudi-heritage palette, RTL Arabic
-//  Requires: npm install lucide-react
-//  Requires app/fonts.ts + font files in app/fonts/
-//  Requires images in /public: logo.png, footer-logo.png,
-//    profile.jpg, Cup.png, dallah_for_a_cup.png, side-line.png
-// ============================================================
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import { Analytics } from "@vercel/analytics/next"
 import {
   Menu,
   X,
@@ -29,8 +20,7 @@ import {
   Phone,
   Globe,
 } from "lucide-react";
-
-// أيقونات مخصصة (lucide-react شالت أيقونات العلامات التجارية)
+// ---------- أيقونات الشبكات الاجتماعية ----------
 function GithubIcon({ size = 17 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -118,7 +108,7 @@ const EXPERIENCE = [
     current: false,
     points: [
       "تصميم وتسليم حلّي Power BI متكاملين ودمجهما في بوابة BI موحّدة",
-      "بناء خط تحليل يغطي أكثر من 70,000 صف عبر 8 أشهر",
+      "بناء خط تحليل يغطي أكثر من 70,000 صف عبر 12 شهر",
       "تمثيل الشركة في 8 اجتماعات فنية وتحليل +1,250 ردّ على كراسات الشروط",
     ],
   },
@@ -129,7 +119,7 @@ const EXPERIENCE = [
     current: false,
     points: [
       "معدل تراكمي 4.55/5",
-      "المركز الأول في اختبار جاهزية هندسة البرمجيات (NCAAA)",
+      "المركز الأول في اختبار جاهزية هندسة البرمجيات (NCAAA) على مستوى كلية الهندسة وعلوم الحاسب",
     ],
   },
   {
@@ -146,28 +136,69 @@ const EXPERIENCE = [
 
 const PROJECTS = [
   {
-    title: "PerformX — إدارة مشاريع بالذكاء الاصطناعي",
-    description: "مشروع التخرج: تطبيق ويب لإدارة المشاريع مدعوم بتكامل OpenAI.",
-    tags: ["C#", "ASP.NET Core", "OpenAI"],
+    title: "PerformX — نظام إدارة مشاريع بالذكاء الاصطناعي",
+    description: "مشروع التخرج: نظام ويب لإدارة مشاريع البرمجيات يؤتمت تكوين الفرق عبر تكامل OpenAI.",
+    tags: ["C#", "ASP.NET Core", "PostgreSQL", "OpenAI API", "Agile/Kanban"],
     year: "2025",
     gradient: "from-[#2454a4] to-[#173a78]",
     Image: "/PerformX3.png",
+    details: {
+      overview:
+        "نظام إدارة مشاريع برمجية شامل يعالج مشاكل ضعف التنسيق بين العملاء ومدراء المشاريع والموظفين. يستقبل النظام مقترحات العملاء، يدير عروض الأسعار والاتفاقيات، ثم يُشكّل فريق العمل تلقائياً بالاستعانة بـ OpenAI بناءً على تخصص كل موظف وحجم مهامه الحالي.",
+      role: "عمل جماعي ضمن فريق من 4 طلاب كمشروع تخرج بكالوريوس علوم حاسب، بإشراف أكاديمي. المساهمة شملت تصميم وتطوير النظام باستخدام ASP.NET Core مع التركيز على إدارة المهام وتجربة المستخدم.",
+      highlights: [
+        "تكوين فرق العمل تلقائياً عبر OpenAI بناءً على التخصص وعبء العمل",
+        "نظام متكامل لإدارة المقترحات وعروض الأسعار بين العميل والمدير",
+        "لوحات تحكم مخصصة لكل دور (مدير، قائد مشروع، مطوّر، عميل)",
+        "منهجية Agile/Kanban في إدارة سير العمل والمهام",
+        "اختبار شامل (White Box عبر Postman + Black Box) لجميع الوظائف الأساسية",
+      ],
+      tools: ["ASP.NET Core", "C#", "PostgreSQL", "HTML/CSS/JavaScript", "OpenAI API", "Figma"],
+    },
   },
   {
     title: "بوابة BI التنفيذية",
-    description: "لوحتا Power BI متكاملتان تغطي +950 سجل موظف و+30 مصدر بيانات.",
-    tags: ["Power BI", "DAX", "SQL"],
+    description: "لوحتا Power BI متكاملتان تغطي بيانات الموظفين والمشتريات المفتوحة وتتبع الموردين.",
+    tags: ["Power BI", "Power Query", "DAX", "Excel", "KPI Design"],
     year: "2025",
     gradient: "from-[#3f7d52] to-[#2f5e3f]",
     Image: "/bi-portal.svg",
+    details: {
+    overview:
+        "بوابة تحليلات تنفيذية موحّدة تجمع بين لوحتي Power BI (بيانات الموظفين والمشتريات المفتوحة وتتبع الموردين) في بوابة واحدة، تتيح لصناع القرار متابعة المؤشرات الحيوية دون الحاجة للتنقل بين تقارير متفرقة.",
+    role: "بناء الحل بالكامل من جمع البيانات وتنظيفها إلى تصميم المقاييس ولوحات المعلومات، مع دمجها في بوابة واحدة.",
+    highlights: [
+        "دمج أكثر من 30 ملف اكسل لبيانات مختلفة في نموذج موحّد",
+        "تنظيف وتوحيد البيانات باستخدام Power Query",
+        "تغطية بيانات جميع الموظفين بتحديث دوري",
+        "تغطية جميع بيانات المشتريات بتحديث دوري",
+        "تصميم مقاييس DAX مخصصة للمؤشرات التنفيذية",
+        "تصميم واجهة مستخدم تفاعلية وسهلة الاستخدام للوحات",
+        "توفير تجربة مستخدم سلسة عبر دمج لوحتين في بوابة واحدة",
+        "تحسين اتخاذ القرارت بشأن الميزانية والحوكمة المالية من خلال مؤشرات دقيقة وموثوقة",
+      ],
+      tools: ["Power BI Desktop", "Power Query", "DAX", "Excel", "KPI Design"],
+    },
   },
   {
     title: "QassimPay — منصة مصرفية رقمية",
     description: "تطبيق ويب مصرفي يحاكي العمليات الأساسية للحسابات والتحويلات.",
-    tags: ["C#", "ASP.NET Core MVC", "SQL Server"],
+    tags: ["C#", "ASP.NET Core MVC", "PostgreSQL", "Bootstrap", "Entity Framework Core", "RESTful API"],
     year: "2024",
     gradient: "from-[#5b93e6] to-[#2454a4]",
     Image: "/QassimPay.jpg",
+    details: {
+      overview:"منصة مصرفية رقمية تحاكي العمليات الأساسية للحسابات والتحويلات، تم تطويرها كجزء من مشروع أكاديمي لتطبيق مفاهيم هندسة البرمجيات في بيئة عملية.",
+      role: "تصميم وتطوير التطبيق باستخدام ASP.NET Core MVC مع التركيز على تجربة المستخدم والأمان.",
+      highlights: [
+        "تطوير منصة تحاكي العمليات المصرفية الأساسية مثل فتح الحسابات وإجراء التحويلات",
+        "تصميم واجهة مستخدم سهلة الاستخدام وسريعة",
+        "دمج جميع العمليات المصرفية في تطبيق واحد",
+        "API تحويل العملات لمعرفة أسعار الصرف الحالية",
+        "تحسين تجربة المستخدم من خلال تصميم واجهة تفاعلية"
+      ],
+      tools: ["C#", "ASP.NET Core MVC", "PostgreSQL", "Bootstrap", "Entity Framework Core", "RESTful API"],
+    },
   },
   {
     title: "WSA34 — كأس العالم السعودية 2034",
@@ -176,6 +207,17 @@ const PROJECTS = [
     year: "2024",
     gradient: "from-[#6b7d52] to-[#3f5e2f]",
     Image: "/2WSA34.png",
+    details: {
+      overview: "تطبيق ويب خاص بمونديال 2034 ضمن مشروع تخرج معسكر تطوير المواقع بإستخدام ASP.NET Core MVC أكاديمية طويق.",
+      role: "تصميم وتطوير التطبيق بالكامل ضمن متطلبات التخرج من معسكر أكاديمية طويق.",
+      highlights: [
+        "تصميم واجهة مستخدم سهلة الاستخدام",
+        "تطوير نظام إدارة محتوى فعال",
+        "دمج جميع المعلومات المتعلقة بمونديال 2034 في تطبيق واحد",
+        "لوحة بيانات بسيطة لاظافة المباريات والفرق والنتائج",
+      ],
+      tools: ["C#", "ASP.NET Core MVC", "Bootstrap", "Entity Framework Core"],
+    },
   },
   {
     title: "بوت البريد الجماعي",
@@ -184,15 +226,36 @@ const PROJECTS = [
     year: "2023",
     gradient: "from-[#173a78] to-[#0a1f1c]",
     Image: "/mail-bot.svg",
+    details: {
+      overview: "تطبيق سطح مكتب يرسل بريد اكتروني جماعي بشكل منفصل لاتمتة عملية التواصل مع جهات الاتصال المؤسسية، مع إمكانية تخصيص الرسائل وإرفاق ملفات.",
+      role: "تصميم وتطوير التطبيق باستخدام C# لتسهيل عملية إرسال البريد الجماعي.",
+      highlights: [
+        "تصميم واجهة مستخدم سهلة الاستخدام",
+        "تطوير نظام أتمتة فعال لإرسال البريد الجماعي",
+        "دمج جميع الميزات المطلوبة في تطبيق واحد"
+      ],
+      tools: ["C#", "Windows Forms", "SMTP"],
+    },
   },
   {
     title: "TODO — متتبع المهام",
     description: "تطبيق ويب لإدارة المهام اليومية بواجهة بسيطة وسريعة.",
-    tags: ["C#", "CRUD"],
+    tags: ["PHP", "Laravel"],
     year: "2023",
     gradient: "from-[#2454a4] to-[#3f7d52]",
     Image: "/TODO.png",
+    details: {
+      overview: "تطبيق ويب لإدارة المهام اليومية مع امكانية انشاء فرق وتتبع المهام المتأخرة مع تغيير الحالة بشكل تلقائي وارسال رسائل تنبيهية للبريد الاكتروني.",
+      role: "تصميم وتطوير التطبيق باستخدام تقنيات الويب الحديثة.",
+      highlights: [
+        "تصميم واجهة مستخدم سهلة الاستخدام",
+        "تطوير نظام إدارة المهام فعال",
+        "دمج جميع الميزات المطلوبة في تطبيق واحد",
+      "ارسال رسائل تنبيهية للبريد الاكتروني",
+    ],
+    tools: ["PHP", "Laravel", "Bootstrap", "MySQL", "SMTP"],
   },
+  }
 ];
 
 // ---------- مكوّن قسم عام يُعاد استخدامه ----------
@@ -229,6 +292,18 @@ function Section({
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState("hero");
+  const [selectedProject, setSelectedProject] = useState<(typeof PROJECTS)[number] | null>(null);
+  // تجميد التمرير عند فتح نافذة تفاصيل المشروع
+  useEffect(() => {
+    if (selectedProject) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selectedProject]);
 
   return (
     <div
@@ -318,27 +393,28 @@ export default function Home() {
       <main className="relative">
         {/* ===== Hero ===== */}
 <section id="hero" className="relative flex min-h-screen items-center pt-16 overflow-hidden">
+  
   {/* خلفية متحركة */}
-  <motion.div 
-    className="absolute inset-0 -z-10"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: 1 }}
-  >
-    <div className="absolute top-1/4 -right-1/4 h-[600px] w-[600px] rounded-full bg-[#5b93e6]/5 blur-[120px]" />
-    <div className="absolute bottom-1/4 -left-1/4 h-[500px] w-[500px] rounded-full bg-[#3f7d52]/5 blur-[120px]" />
-  </motion.div>
+    <motion.div 
+      className="absolute inset-0 -z-10"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+    >
+      <div className="absolute top-1/4 -right-1/4 h-[600px] w-[600px] rounded-full bg-[#5b93e6]/5 blur-[120px]" />
+      <div className="absolute bottom-1/4 -left-1/4 h-[500px] w-[500px] rounded-full bg-[#3f7d52]/5 blur-[120px]" />
+    </motion.div>
 
-  {/* السجادة - خلفية باهتة، ما تنافس النص */}
-  <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden">
-    <Image
-      src="/Carpet.png"
-      alt=""
-      fill
-      priority
-      className="object-left opacity-[0.9] md:opacity-[0.42] lg:opacity-[0.8]"
-    />
-  </div>
+  {/* السجادة - خلفية باهتة*/}
+    <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden">
+      <Image
+        src="/Carpet.png"
+        alt=""
+        fill
+        priority
+        className="object-left opacity-[0.9] md:opacity-[0.42] lg:opacity-[0.8]"
+      />
+    </div>
 
   {/* طبقة تعتيم خفيفة لضمان وضوح النص فوق السجادة */}
   <div className="pointer-events-none absolute inset-0 z-[1] bg-[#0a1f1c]/60" />
@@ -433,8 +509,8 @@ export default function Home() {
           متاح للعمل
         </span>
       </motion.div>
+      
     </motion.div>
-
 {/* الدلة والفنجال - مركب متحرك مع تأثير صب القهوة */} 
 <motion.div 
   className="relative hidden h-[550px] w-[500px] items-center justify-center lg:flex"
@@ -474,8 +550,6 @@ export default function Home() {
      {/* محتوى الخط (السائل) */}
   </div>
 </motion.div>
-
-
     {/* تم وضع الخط داخل الحاوية الكبيرة، وليس داخل الدلة، لضمان التحكم بزاويته وطوله */}
     <motion.div 
       className="absolute top-[43%] left-[16%] h-[140px] w-[4px] origin-top"
@@ -525,7 +599,7 @@ export default function Home() {
         <div className="h-2 w-10 rounded-full bg-gradient-to-b from-[#8B5E3C] to-[#5b3a1a] blur-md" />
       </motion.div>
     </motion.div>
-
+       
     {/* بخار القهوة المتصاعد */}
     {[0, 1, 2].map((i) => (
       <motion.div
@@ -539,7 +613,7 @@ export default function Home() {
 
     {/* النص السفلي */}
     <motion.p 
-      className="absolute bottom-0 w-full text-center text-sm tracking-widest text-white/35"
+      className="absolute bottom-0 w-full text-right text-lg font-light tracking-widest text-white/85"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.9, duration: 0.5 }}
@@ -632,9 +706,9 @@ export default function Home() {
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.6, delay: 0.4 }}
       >
-        مهندس برمجيات سعودي، خريج بكالوريوس هندسة برمجيات بتقدير ممتاز مع مرتبة الشرف الثانية وايضا حاصل على شهادة الدبلوم في تقنية شبكات الحاسب. أجمع بين
+        مهندس برمجيات سعودي، خريج بكالوريوس هندسة برمجيات بتقدير ممتاز مع مرتبة الشرف الثانية وايضا حاصل على شهادة الدبلوم في تقنية شبكات الحاسب بتقدير ممتاز مع مرتبة الشرف الأولى. أجمع بين
         التطوير البرمجي وتحليل البيانات وايضا تطوير الأعمال لتقديم حلول تقنية ذات أثر
-        حقيقي — من بناء التطبيقات إلى تصميم لوحات المعلومات التنفيذية.
+        حقيقي من بناء التطبيقات إلى تصميم لوحات المعلومات التنفيذية.
         <br />
         <br />
         حاصل على شهادة CAPM® المعتمدة من PMI، وأمتلك خبرة تدريبية في
@@ -744,7 +818,10 @@ export default function Home() {
             {PROJECTS.map((p, i) => (
               <article
                 key={i}
-                className="group overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] transition duration-300 hover:-translate-y-1.5 hover:border-white/20"
+                onClick={() => p.details && setSelectedProject(p)}
+                className={`group overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] transition duration-300 hover:-translate-y-1.5 hover:border-white/20 ${
+                  p.details ? "cursor-pointer" : ""
+                }`}
               >
                 <div className={`relative flex h-44 items-end bg-gradient-to-br ${p.gradient} p-4`}>
                                     {p.Image && (
@@ -875,7 +952,82 @@ export default function Home() {
           </div>
         </Section>
       </main>
+      {/* ===== Modal تفاصيل المشروع ===== */}
+      {selectedProject?.details && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+          onClick={() => setSelectedProject(null)}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-white/10 bg-[#0b1d15]"
+          >
+            {/* صورة الرأس */}
+            <div className={`relative h-52 bg-gradient-to-br ${selectedProject.gradient}`}>
+              {selectedProject.Image && (
+                <Image
+                  src={selectedProject.Image}
+                  alt={selectedProject.title}
+                  fill
+                  className="object-cover"
+                />
+              )}
+              <button
+                onClick={() => setSelectedProject(null)}
+                className="absolute left-4 top-4 flex h-10 w-10 items-center cursor-pointer justify-center rounded-full bg-black/50 text-white backdrop-blur transition-all hover:scale-110 hover:bg-[#d00000] hover:text-white"
+                aria-label="إغلاق"
+              >
+                <X size={20} />
+              </button>
+              <span className="absolute bottom-4 right-6 rounded-full bg-black/40 px-3 py-1 text-xs font-bold text-white backdrop-blur">
+                {selectedProject.year}
+              </span>
+            </div>
 
+            {/* المحتوى */}
+            <div className="p-6 md:p-8">
+              <h3 className={`${saudiFont.className} text-2xl font-black md:text-3xl`}>
+                {selectedProject.title}
+              </h3>
+
+              <p className="mt-4 leading-relaxed text-white/70">
+                {selectedProject.details.overview}
+              </p>
+
+              <div className="mt-6">
+                <h4 className="mb-2 text-sm font-bold text-[#5b93e6]">دوري في المشروع</h4>
+                <p className="text-sm leading-relaxed text-white/65">{selectedProject.details.role}</p>
+              </div>
+
+              <div className="mt-6">
+                <h4 className="mb-3 text-sm font-bold text-[#5b93e6]">أبرز الإنجازات</h4>
+                <ul className="space-y-2">
+                  {selectedProject.details.highlights.map((h, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-sm leading-relaxed text-white/70">
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rotate-45 bg-[#3f7d52]" />
+                      {h}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                {selectedProject.details.tools.map((t) => (
+                  <span
+                    key={t}
+                    className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-sm text-white/75"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
       {/* ===== Footer ===== */}
       <footer className="relative border-t border-white/5 pt-6 pb-8">
         <div
