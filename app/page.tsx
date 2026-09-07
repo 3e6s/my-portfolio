@@ -357,7 +357,7 @@ export default function Home() {
       <header className="fixed top-0 z-50 w-full border-b border-white/5 bg-[#0a1f1c]/85 backdrop-blur-xl">
         <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <a href="#hero" className="flex items-center gap-4">
-            <Image src="/logo_National.png" alt="فهد الفهيد" width={160} height={130} className="rounded-lg" />
+            <Image src="/logo.png" alt="فهد الفهيد" width={120} height={100} className="rounded-lg" />
             <span className={`${saudiFont.className} text-xl font-black tracking-wide`}>
               <span className="text-white">فهد</span>
               <span className="mr-2 bg-gradient-to-l from-[#5b93e6] to-[#3f7d52] bg-clip-text text-transparent">
@@ -539,9 +539,15 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.9, duration: 0.5 }}
       >
-        <Image src="/National.png" alt="الدلة" width={130} height={100} priority />
+  
 
-   
+        <div className="relative">
+          {/* توهج خلف النص */}
+          <div className="absolute inset-0 -z-10 scale-150 rounded-full bg-[#5b93e6]/20 blur-2xl" />
+          <p className="text-lg font-semibold tracking-widest text-white/90">
+            عزنا بطموحنا
+          </p>
+        </div>
       </motion.div>
     </motion.div>
 {/* الدلة والفنجال - مركب متحرك مع تأثير صب القهوة */} 
