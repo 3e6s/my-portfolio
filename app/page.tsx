@@ -139,7 +139,7 @@ const PROJECTS = [
       title: "PerformX — نظام إدارة مشاريع بالذكاء الاصطناعي",
       description:
         "مشروع التخرج: نظام ويب لإدارة مشاريع البرمجيات يؤتمت تكوين الفرق عبر تكامل OpenAI.",
-      tags: ["C#", "ASP.NET Core", "PostgreSQL", "OpenAI API", "Agile/Kanban", "Figma", "Postman"],
+      tags: ["C#", "ASP.NET Core MVC", "PostgreSQL", "OpenAI API", "Agile/Kanban", "Figma", "Postman"],
       year: "2025",
       gradient: "from-[#2454a4] to-[#173a78]",
       Image: "/PerformX3.png",
@@ -164,7 +164,7 @@ const PROJECTS = [
 
         tools: [
           "C#",
-          "ASP.NET Core",
+          "ASP.NET Core MVC",
           "PostgreSQL",
           "HTML/CSS/JavaScript",
           "OpenAI API",
@@ -223,7 +223,7 @@ const PROJECTS = [
   {
     title: "WSA34 — كأس العالم السعودية 2034",
     description: "تطبيق ويب خاص بمونديال 2034 ضمن مشاريع أكاديمية طويق.",
-    tags: ["C#", "Web App"],
+    tags: ["C#", "Web App", "ASP.NET Core MVC", "Bootstrap", "Entity Framework Core"],
     year: "2024",
     gradient: "from-[#6b7d52] to-[#3f5e2f]",
     Image: "/2WSA34.png",
@@ -332,7 +332,7 @@ export default function Home() {
   return (
     <div
       dir="rtl"
-      className={`${ibmPlexArabic.className} relative min-h-screen bg-[#0a1f1c] text-slate-100 selection:bg-[#3f7d52]/40`}
+      className={`${ibmPlexArabic.className} relative min-h-screen w-full overflow-x-hidden bg-[#0a1f1c] text-slate-100 selection:bg-[#3f7d52]/40`}
     >
       {/* أنيميشن الدلة والفنجال */}
       <style jsx>{`
@@ -357,7 +357,7 @@ export default function Home() {
       <header className="fixed top-0 z-50 w-full border-b border-white/5 bg-[#0a1f1c]/85 backdrop-blur-xl">
         <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <a href="#hero" className="flex items-center gap-4">
-            <Image src="/logo.png" alt="فهد الفهيد" width={120} height={100} className="rounded-lg" />
+            <Image src="/logo_National.png" alt="فهد الفهيد" width={160} height={130} className="rounded-lg" />
             <span className={`${saudiFont.className} text-xl font-black tracking-wide`}>
               <span className="text-white">فهد</span>
               <span className="mr-2 bg-gradient-to-l from-[#5b93e6] to-[#3f7d52] bg-clip-text text-transparent">
@@ -533,14 +533,16 @@ export default function Home() {
           متاح للعمل
         </span>
       </motion.div>
-      <motion.p 
-      className="absolute bottom-0 w-full text-center text-lg font-bold tracking-widest text-white/85"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.9, duration: 0.5 }}
-    >
-      إرثنا وتراثنا يعزّنا
-    </motion.p>
+      <motion.div
+        className="absolute bottom-0 flex w-full flex-col items-center gap-3"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.9, duration: 0.5 }}
+      >
+        <Image src="/National.png" alt="الدلة" width={130} height={100} priority />
+
+   
+      </motion.div>
     </motion.div>
 {/* الدلة والفنجال - مركب متحرك مع تأثير صب القهوة */} 
 <motion.div 
@@ -662,65 +664,54 @@ export default function Home() {
 
 {/* ===== About ===== */}
 <Section id="about" icon={User} title="نبذة عني" subtitle="من أنا وماذا أقدم">
-  <div className="flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:gap-12">
-    
-    {/* الصورة الشخصية - مرفوعة قليلاً ومكبرة */}
-    <motion.div 
-      className="relative h-52 w-52 shrink-0 lg:h-64 lg:w-64"  // تكبير الحجم
+  <div className="flex w-full min-w-0 flex-col items-center gap-8 overflow-hidden lg:flex-row lg:items-start lg:gap-12">
+
+    {/* الصورة الشخصية */}
+    <motion.div
+      className="relative aspect-square w-52 shrink-0 overflow-hidden rounded-3xl lg:w-64"
       initial={{ opacity: 0, scale: 0.5, y: 20 }}
       whileInView={{ opacity: 1, scale: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
-      transition={{ 
-        duration: 0.8,
-        type: "spring",
-        stiffness: 150,
-        damping: 15
-      }}
+      transition={{ duration: 0.8, type: "spring", stiffness: 150, damping: 15 }}
     >
-      {/* خلفية متوهجة مكبرة */}
-      <motion.div 
-        className="absolute -inset-16 bg-gradient-to-br from-[#5b93e6]/20 to-[#3f7d52]/20 blur-3xl"
+      {/* خلفية متوهجة */}
+      <motion.div
+        className="pointer-events-none absolute -inset-8 -z-10 overflow-hidden rounded-full bg-gradient-to-br from-[#5b93e6]/20 to-[#3f7d52]/20 blur-3xl"
         initial={{ opacity: 0, scale: 0.5 }}
         whileInView={{ opacity: 0.8, scale: 2 }}
         viewport={{ once: true }}
         transition={{ duration: 1.5, delay: 0.3 }}
       />
-      
-      {/* الصورة مع حركة بسيطة */}
-      <motion.div
-        className="relative h-full w-full"
-        animate={{
-          y: [-5, -12, -5],  // حركة بسيطة للأعلى
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      >
 
-          <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden">
-            <Image
-              src="/Sword.png"
-              alt=""
-              fill
-              priority
-              className="object-left opacity-[0.9] md:opacity-[0.42] lg:opacity-[0.8]"
-            />
-          </div>
+      {/* خلفية Sword */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <Image
+          src="/Sword.png"
+          alt=""
+          fill
+          className="object-cover opacity-40"
+        />
+      </div>
+
+      {/* الصورة الشخصية مع حركة بسيطة */}
+      <motion.div
+        className="absolute inset-0 z-10"
+        animate={{ y: [-5, -12, -5] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      >
         <Image
           src="/profile.png"
           alt="فهد الفهيد"
           fill
-          className="object-contain scale-[1.3]"  // تكبير 30%
+          className="object-contain"
           priority
         />
       </motion.div>
     </motion.div>
 
     {/* النص */}
-    <div className="flex-1">
-      <motion.p 
+    <div className="min-w-0 flex-1">
+      <motion.p
         className="text-base leading-relaxed text-white/70 md:text-lg md:leading-loose"
         initial={{ opacity: 0, x: 30 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -734,15 +725,12 @@ export default function Home() {
         <br />
         حاصل على شهادة CAPM® المعتمدة من PMI، وأمتلك خبرة تدريبية في
         إدارة المشاريع التقنية وإدارة حوكمة التكنولوجيا.
-        
       </motion.p>
-      
     </div>
-    
   </div>
 
   {/* بطاقات المهارات */}
-  <motion.div 
+  <motion.div
     className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4"
     initial={{ opacity: 0, y: 40 }}
     whileInView={{ opacity: 1, y: 0 }}
