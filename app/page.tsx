@@ -650,7 +650,7 @@ export default function Home() {
       >
         <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <a href="#hero" className="flex items-center gap-4">
-            <Image src="/brand-emblem.png" alt="فهد الفهيد" width={100} height={90} className="rounded-lg" />
+            <Image src="/brand-emblem.png" alt="فهد الفهيد" width={80} height={70} className="rounded-lg" />
             <span className={`${saudiFont.className} text-xl font-black tracking-wide`}>
               <span className="text-[#e8cf9f]">فهد</span>
               <span className="mr-2 bg-gradient-to-l from-[#d1af6f] to-[#7fb069] bg-clip-text text-transparent">
@@ -820,10 +820,14 @@ export default function Home() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6, duration: 0.5 }}
       >
+             عزنا بطموحنا
+        <span className="h-1 w-1 rounded-full bg-white/30" />
         <span className="flex items-center gap-1.5">
-          <MapPin size={15} className="text-[#ffffff]" />
+   
+        <MapPin size={15} className="text-[#ffffff]" />
           الرياض، السعودية
         </span>
+
         <span className="h-1 w-1 rounded-full bg-white/30" />
         <span className="flex items-center gap-1.5">
           <span className="relative flex h-2 w-2">
@@ -845,7 +849,7 @@ export default function Home() {
           {/* توهج خلف النص */}
           <div className="absolute inset-0 -z-10 scale-150 rounded-full bg-[#5b93e6]/20 blur-2xl" />
           <p className="text-lg font-semibold tracking-widest text-white/90">
-            عزنا بطموحنا
+          
           </p>
         </div>
       </motion.div>
