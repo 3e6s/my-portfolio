@@ -21,6 +21,7 @@ import {
   Award,
   ChevronLeft,
   ChevronRight,
+  Eye,
 } from "lucide-react";
 
 
@@ -288,7 +289,7 @@ const PROJECTS = [
 ];
 
 const CERTIFICATES = [
-    {
+  {
     title: "CAPM®",
     subtitle: "Certified Associate in Project Management",
     issuer: "PMI",
@@ -299,20 +300,39 @@ const CERTIFICATES = [
     subtitle: "SCFHS Training Certificate",
     issuer: "SCFHS",
     image:"/Fahad_Alfehaid_SCFHS_Training_Certificate.jpg",
- 
   },
   {
     title: "شهادة اتمام التدريب التعاوني",
     subtitle: "تدريب تعاوني في الحوكمة التقنية",
-    issuer: "تحكم",
+    issuer: "تحكم (Tahakom)",
     image: "/Fahad_Alfehaid_Tahakom_COOP_Training_Certificate.jpg",
   },
- 
+
+  {
+    title: "شهادة إتمام برنامج Laravel إطار العمل",
+    subtitle: "Laravel Framework Training Program",
+    issuer: "Code Labs & Qassim Tech",
+    image: "/codelab.jpg", 
+  },
+  {
+    title: "شهادة اجتياز معسكر الذكاء الاصطناعي التوليدي",
+    subtitle: "Generative AI Bootcamp (LLAMA)",
+    issuer: "أكاديمية طويق (Tuwaiq Academy)",
+    image: "/GenAI.jpg", 
+  },
+  {
+    title: "شكر وتقدير - مكافأة التفوق العلمي",
+    subtitle: "Excellence Award Appreciation Certificate",
+    issuer: "المؤسسة العامة للتدريب التقني والمهني (TVTC)",
+    image: "/شكر وتقدير التقنية.jpg", 
+  },
 ];
 
 // ---------- مكوّن قسم عام يُعاد استخدامه ----------
+// ---------- مكوّن قسم عام يُعاد استخدامه ----------
 function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
   const [index, setIndex] = useState(0);
+  const [selectedCertificate, setSelectedCertificate] = useState<(typeof CERTIFICATES)[number] | null>(null);
   const total = items.length;
 
   const goTo = (dir: 1 | -1) => {
@@ -362,7 +382,7 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
               "
               animate={{
                 // المسافة بين الكروت
-                x: offset * 265,
+                x: offset * 280,
 
                 // دوران 3D
                 rotateY: offset * -38,
@@ -395,8 +415,9 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
                 backfaceVisibility: "hidden",
               }}
             >
+
               {/* صورة الشهادة */}
-              <div className="relative h-[230px] w-full bg-white/[0.04]">
+              <div className="group relative h-[230px] w-full bg-white/[0.04]">
                 <Image
                   src={c.image}
                   alt={c.title}
@@ -404,6 +425,22 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
                   draggable={false}
                   className="pointer-events-none object-contain p-4"
                 />
+                
+                {/* زر العين لفتح الصورة (يظهر فقط في المنتصف) */}
+                {isCenter && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedCertificate(c);
+                    }}
+                    className="absolute inset-0 z-10 flex cursor-pointer items-center justify-center bg-black/50 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100"
+                    aria-label="عرض الشهادة"
+                  >
+                    <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/10">
+                      <Eye size={24} className="text-white" />
+                    </span>
+                  </button>
+                )}
               </div>
 
               {/* معلومات الشهادة */}
@@ -487,9 +524,46 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
           <ChevronLeft size={22} />
         </button>
       </div>
+
+      {/* ===== Popup لعرض الشهادة ===== */}
+      {selectedCertificate && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+          onClick={() => setSelectedCertificate(null)}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-2xl border border-white/10 bg-[#0b1d15]"
+          >
+            {/* زر الإغلاق */}
+            <button
+              onClick={() => setSelectedCertificate(null)}
+              className="absolute left-4 top-4 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-black/50 text-white backdrop-blur transition-all hover:scale-110 hover:bg-[#d00000]"
+              aria-label="إغلاق"
+            >
+              <X size={20} />
+            </button>
+
+            {/* الصورة بالحجم الكامل */}
+            <div className="relative flex h-[80vh] w-full items-center justify-center bg-white/[0.03] p-6 md:p-10">
+              <Image
+                src={selectedCertificate.image}
+                alt={selectedCertificate.title}
+                fill
+                draggable={false}
+                className="object-contain"
+              />
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
+
 function Section({
   id,
   icon: Icon,
