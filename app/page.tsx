@@ -314,11 +314,24 @@ const CERTIFICATES = [
     issuer: "Code Labs & Qassim Tech",
     image: "/codelab.jpg", 
   },
+    {
+    title: "شهادة اجتياز معسكر تطوير المواقع باستخدام ASP.NET Core MVC",
+    subtitle: "Web Development Bootcamp using ASP.NET Core MVC",
+    issuer: "أكاديمية طويق (Tuwaiq Academy)",
+    image: "/ASP.NET.jpg", 
+  },
+  
   {
     title: "شهادة اجتياز معسكر الذكاء الاصطناعي التوليدي",
     subtitle: "Generative AI Bootcamp (LLAMA)",
     issuer: "أكاديمية طويق (Tuwaiq Academy)",
     image: "/GenAI.jpg", 
+  },
+    {
+    title: "خطاب شكر وتقدير - التفوق في اختبار الجاهزية",
+    subtitle: "Appreciation Letter - Software Engineering Readiness Exam",
+    issuer: "جامعة المستقبل (Mustaqbal University)",
+    image: "/جاهزية.jpg", 
   },
   {
     title: "شكر وتقدير - مكافأة التفوق العلمي",
