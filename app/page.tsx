@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Analytics } from "@vercel/analytics/next"
 import {
@@ -18,8 +18,12 @@ import {
   MessageSquare,
   Mail,
   Phone,
-  Globe,
+  Award,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
+
+
 // ---------- أيقونات الشبكات الاجتماعية ----------
 function GithubIcon({ size = 17 }: { size?: number }) {
   return (
@@ -46,6 +50,7 @@ const NAV = [
   { id: "projects", label: "المشاريع" },
   { id: "skills", label: "المهارات" },
   { id: "contact", label: "تواصل" },
+  { id: "certificates", label: "الشهادات" },
 ];
 
 const LINKS = {
@@ -282,8 +287,209 @@ const PROJECTS = [
   }
 ];
 
-// ---------- مكوّن قسم عام يُعاد استخدامه ----------
+const CERTIFICATES = [
+    {
+    title: "CAPM®",
+    subtitle: "Certified Associate in Project Management",
+    issuer: "PMI",
+    image: "/CAPM.jpg",
+  },
+  {
+    title: "شهادة الهيئة السعودية للتخصصات الصحية اتمام التدريب ",
+    subtitle: "SCFHS Training Certificate",
+    issuer: "SCFHS",
+    image:"/Fahad_Alfehaid_SCFHS_Training_Certificate.jpg",
+ 
+  },
+  {
+    title: "شهادة اتمام التدريب التعاوني",
+    subtitle: "تدريب تعاوني في الحوكمة التقنية",
+    issuer: "تحكم",
+    image: "/Fahad_Alfehaid_Tahakom_COOP_Training_Certificate.jpg",
+  },
+ 
+];
 
+// ---------- مكوّن قسم عام يُعاد استخدامه ----------
+function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
+  const [index, setIndex] = useState(0);
+  const total = items.length;
+
+  const goTo = (dir: 1 | -1) => {
+    setIndex((prev) => (prev + dir + total) % total);
+  };
+
+  return (
+    <div className="relative flex flex-col items-center">
+      {/* المسرح ثلاثي الأبعاد */}
+      <div
+        className="relative flex h-[520px] w-full items-center justify-center overflow-visible"
+        style={{
+          perspective: "1400px",
+          perspectiveOrigin: "50% 50%",
+        }}
+      >
+        {items.map((c, i) => {
+          let offset = i - index;
+
+          // أقصر مسار دائري
+          if (offset > total / 2) offset -= total;
+          if (offset < -total / 2) offset += total;
+
+          // نعرض فقط:
+          // - الكرت الأوسط
+          // - الكرت الذي على اليمين
+          // - الكرت الذي على اليسار
+          if (Math.abs(offset) > 1) return null;
+
+          const isCenter = offset === 0;
+          const isSide = Math.abs(offset) === 1;
+
+          return (
+            <motion.div
+              key={i}
+              className="
+                absolute
+                w-[300px]
+                cursor-pointer
+                select-none
+                overflow-hidden
+                rounded-3xl
+                border
+                border-white/10
+                bg-[#0b1d15]
+                shadow-2xl
+              "
+              animate={{
+                // المسافة بين الكروت
+                x: offset * 265,
+
+                // دوران 3D
+                rotateY: offset * -38,
+
+                // ميلان بسيط يعطي إحساس 3D أفضل
+                rotateZ: offset * 1.5,
+
+                // الكرت الخلفي أعمق
+                z: isCenter ? 0 : -120,
+
+                // الحجم
+                scale: isCenter ? 1 : 0.82,
+
+                // وضوح الكروت
+                opacity: isCenter ? 1 : 0.58,
+
+                // ترتيب الطبقات
+                zIndex: isCenter ? 20 : 10,
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 220,
+                damping: 25,
+                mass: 0.8,
+              }}
+              onClick={() => !isCenter && setIndex(i)}
+              style={{
+                transformStyle: "preserve-3d",
+                transformOrigin: "center center",
+                backfaceVisibility: "hidden",
+              }}
+            >
+              {/* صورة الشهادة */}
+              <div className="relative h-[230px] w-full bg-white/[0.04]">
+                <Image
+                  src={c.image}
+                  alt={c.title}
+                  fill
+                  draggable={false}
+                  className="pointer-events-none object-contain p-4"
+                />
+              </div>
+
+              {/* معلومات الشهادة */}
+              <div className="border-t border-white/10 bg-gradient-to-br from-[#173a78]/40 to-[#0a1f1c] p-6">
+                <div className="mb-3 flex items-center justify-between">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#5b93e6]/40 bg-[#2454a4]/20">
+                    <Award size={18} className="text-[#5b93e6]" />
+                  </span>
+
+                  {c.issuer && (
+                    <span className="text-xs text-white/40">
+                      {c.issuer}
+                    </span>
+                  )}
+                </div>
+
+                <h3
+                  className={`${saudiFont.className} text-xl font-bold text-white`}
+                >
+                  {c.title}
+                </h3>
+
+                <p className="mt-2 text-sm text-white/50">
+                  {c.subtitle}
+                </p>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* أسهم التنقل + المؤشرات */}
+      <div className="mt-2 flex items-center gap-6">
+        <button
+          onClick={() => goTo(-1)}
+          className="
+            flex h-11 w-11 cursor-pointer
+            items-center justify-center
+            rounded-full
+            border border-white/15
+            text-white/70
+            transition
+            hover:border-[#5b93e6]/50
+            hover:text-[#5b93e6]
+          "
+          aria-label="السابق"
+        >
+          <ChevronRight size={22} />
+        </button>
+
+        {/* مؤشرات النقاط */}
+        <div className="flex items-center gap-2">
+          {items.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIndex(i)}
+              className={`h-2 rounded-full transition-all ${
+                i === index
+                  ? "w-6 bg-[#5b93e6]"
+                  : "w-2 bg-white/20"
+              }`}
+              aria-label={`شهادة ${i + 1}`}
+            />
+          ))}
+        </div>
+
+        <button
+          onClick={() => goTo(1)}
+          className="
+            flex h-11 w-11 cursor-pointer
+            items-center justify-center
+            rounded-full
+            border border-white/15
+            text-white/70
+            transition
+            hover:border-[#5b93e6]/50
+            hover:text-[#5b93e6]
+          "
+          aria-label="التالي"
+        >
+          <ChevronLeft size={22} />
+        </button>
+      </div>
+    </div>
+  );
+}
 function Section({
   id,
   icon: Icon,
@@ -316,6 +522,13 @@ function Section({
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState("hero");
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   const [selectedProject, setSelectedProject] = useState<(typeof PROJECTS)[number] | null>(null);
   // تجميد التمرير عند فتح نافذة تفاصيل المشروع
   useEffect(() => {
@@ -354,26 +567,39 @@ export default function Home() {
       </div>
 
       {/* ===== Navbar ===== */}
-      <header className="fixed top-0 z-50 w-full border-b border-white/5 bg-[#0a1f1c]/85 backdrop-blur-xl">
+        <header
+        className={`fixed top-0 z-50 w-full transition-all duration-500 ${
+          scrolled
+            ? "border-transparent bg-transparent backdrop-blur-0"
+            : "border-b border-white/5 bg-[#0a1f1c]/85 backdrop-blur-xl"
+        }`}
+      >
         <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <a href="#hero" className="flex items-center gap-4">
-            <Image src="/logo.png" alt="فهد الفهيد" width={120} height={100} className="rounded-lg" />
+            <Image src="/brand-emblem.png" alt="فهد الفهيد" width={100} height={90} className="rounded-lg" />
             <span className={`${saudiFont.className} text-xl font-black tracking-wide`}>
-              <span className="text-white">فهد</span>
-              <span className="mr-2 bg-gradient-to-l from-[#5b93e6] to-[#3f7d52] bg-clip-text text-transparent">
+              <span className="text-[#e8cf9f]">فهد</span>
+              <span className="mr-2 bg-gradient-to-l from-[#d1af6f] to-[#7fb069] bg-clip-text text-transparent">
                 الفهيد
               </span>
             </span>
           </a>
 
-          <ul className="hidden items-center gap-7 md:flex">
-            {NAV.map((n) => (
-              <li key={n.id}>
+          <ul className="hidden items-center gap-4 md:flex">
+            {NAV.map((n, idx) => (
+              <li key={n.id} className="flex items-center gap-4">
+                {idx !== 0 && (
+                  <span className="text-[#7fb069]" aria-hidden>
+                    ◆
+                  </span>
+                )}
                 <a
                   href={`#${n.id}`}
                   onClick={() => setActive(n.id)}
                   className={`text-sm transition-colors ${
-                    active === n.id ? "font-semibold text-[#5b93e6]" : "text-white/60 hover:text-white"
+                    active === n.id
+                      ? "font-semibold text-[#f0d9a8]"
+                      : "text-[#d1af6f]/80 hover:text-[#f0d9a8]"
                   }`}
                 >
                   {n.label}
@@ -384,14 +610,14 @@ export default function Home() {
 
           <a
             href="#contact"
-            className="hidden rounded-full bg-[#2454a4] px-5 py-2 text-sm font-bold text-white transition hover:bg-[#3066c2] md:block"
+            className="hidden rounded-full border border-[#d1af6f]/40 bg-[#d1af6f]/10 px-5 py-2 text-sm font-bold text-[#f0d9a8] transition hover:bg-[#d1af6f]/20 md:block"
           >
             تواصل معي
           </a>
 
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="rounded-lg p-2 text-white/70 hover:bg-white/5 md:hidden"
+            className="rounded-lg p-2 text-[#d1af6f] hover:bg-white/5 md:hidden"
             aria-label="القائمة"
           >
             {menuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -405,7 +631,7 @@ export default function Home() {
                 key={n.id}
                 href={`#${n.id}`}
                 onClick={() => setMenuOpen(false)}
-                className="block rounded-lg px-3 py-2.5 text-sm text-white/70 hover:bg-white/5 hover:text-[#5b93e6]"
+                className="block rounded-lg px-3 py-2.5 text-sm text-[#d1af6f] hover:bg-white/5 hover:text-[#f0d9a8]"
               >
                 {n.label}
               </a>
@@ -896,6 +1122,11 @@ export default function Home() {
               </div>
             ))}
           </div>
+        </Section>
+
+        {/* ===== Certificates ===== */}
+        <Section id="certificates" icon={Award} title="الشهادات" subtitle="إنجازات موثقة">
+          <CertificatesCarousel items={CERTIFICATES} />
         </Section>
 
         {/* ===== Contact ===== */}
