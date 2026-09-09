@@ -395,19 +395,39 @@ const RECOMMENDATIONS = [
 function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
   const [index, setIndex] = useState(0);
   const [selectedCertificate, setSelectedCertificate] = useState<(typeof CERTIFICATES)[number] | null>(null);
+  const [windowWidth, setWindowWidth] = useState(0);
   const total = items.length;
+
+  // معرفة حجم الشاشة
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const goTo = (dir: 1 | -1) => {
     setIndex((prev) => (prev + dir + total) % total);
   };
 
+  // حساب الأحجام حسب الشاشة
+  const getCardSize = () => {
+    if (windowWidth < 480) return { width: 260, gap: 220, height: 420, imageHeight: 170 };
+    if (windowWidth < 640) return { width: 300, gap: 260, height: 480, imageHeight: 200 };
+    if (windowWidth < 1024) return { width: 360, gap: 320, height: 560, imageHeight: 240 };
+    return { width: 410, gap: 380, height: 620, imageHeight: 280 };
+  };
+
+  const sizes = getCardSize();
+
   return (
     <div className="relative flex flex-col items-center">
       {/* المسرح ثلاثي الأبعاد */}
       <div
-        className="relative flex h-[520px] w-full items-center justify-center overflow-visible"
+        className="relative flex w-full items-center justify-center overflow-visible"
         style={{
-          perspective: "1400px",
+          height: `${sizes.height}px`,
+          perspective: windowWidth < 640 ? "1000px" : "1400px",
           perspectiveOrigin: "50% 50%",
         }}
       >
@@ -418,50 +438,39 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
           if (offset > total / 2) offset -= total;
           if (offset < -total / 2) offset += total;
 
-          // نعرض فقط:
-          // - الكرت الأوسط
-          // - الكرت الذي على اليمين
-          // - الكرت الذي على اليسار
+          // نعرض فقط الكروت القريبة
           if (Math.abs(offset) > 1) return null;
 
           const isCenter = offset === 0;
-          const isSide = Math.abs(offset) === 1;
 
           return (
             <motion.div
               key={i}
               className="
                 absolute
-                w-[410px]
                 cursor-pointer
                 select-none
                 overflow-hidden
-                rounded-3xl
+                rounded-2xl
+                md:rounded-3xl
                 border
                 border-white/10
                 bg-[#0b1d15]
                 shadow-2xl
               "
+              style={{
+                width: `${sizes.width}px`,
+                transformStyle: "preserve-3d",
+                transformOrigin: "center center",
+                backfaceVisibility: "hidden",
+              }}
               animate={{
-                // المسافة بين الكروت
-                x: offset * 390,
-
-                // دوران 3D
-                rotateY: offset * -38,
-
-                // ميلان بسيط يعطي إحساس 3D أفضل
-                rotateZ: offset * 1.5,
-
-                // الكرت الخلفي أعمق
-                z: isCenter ? 0 : -120,
-
-                // الحجم
-                scale: isCenter ? 1 : 0.82,
-
-                // وضوح الكروت
-                opacity: isCenter ? 1 : 0.58,
-
-                // ترتيب الطبقات
+                x: offset * sizes.gap,
+                rotateY: windowWidth < 640 ? offset * -25 : offset * -32,
+                rotateZ: offset * 1.2,
+                z: isCenter ? 0 : windowWidth < 640 ? -60 : -100,
+                scale: isCenter ? 1 : windowWidth < 640 ? 0.75 : 0.85,
+                opacity: isCenter ? 1 : windowWidth < 640 ? 0.6 : 0.7,
                 zIndex: isCenter ? 20 : 10,
               }}
               transition={{
@@ -471,21 +480,19 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
                 mass: 0.8,
               }}
               onClick={() => !isCenter && setIndex(i)}
-              style={{
-                transformStyle: "preserve-3d",
-                transformOrigin: "center center",
-                backfaceVisibility: "hidden",
-              }}
             >
-
               {/* صورة الشهادة */}
-              <div className="group relative h-[230px] w-full bg-white/[0.04]">
+              <div 
+                className="group relative w-full bg-white/[0.04]"
+                style={{ height: `${sizes.imageHeight}px` }}
+              >
                 <Image
                   src={c.image}
                   alt={c.title}
                   fill
                   draggable={false}
-                  className="pointer-events-none object-contain p-4"
+                  className="pointer-events-none object-contain p-3 md:p-4"
+                  sizes="(max-width: 480px) 260px, (max-width: 640px) 300px, (max-width: 1024px) 360px, 410px"
                 />
                 
                 {/* زر العين لفتح الصورة (يظهر فقط في المنتصف) */}
@@ -498,34 +505,36 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
                     className="absolute inset-0 z-10 flex cursor-pointer items-center justify-center bg-black/50 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100"
                     aria-label="عرض الشهادة"
                   >
-                    <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/10">
-                      <Eye size={24} className="text-white" />
+                    <span className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full border border-white/30 bg-white/10">
+                      <Eye size={windowWidth < 640 ? 18 : 24} className="text-white" />
                     </span>
                   </button>
                 )}
               </div>
 
               {/* معلومات الشهادة */}
-              <div className="border-t border-white/10 bg-gradient-to-br from-[#173a78]/40 to-[#0a1f1c] p-6">
-                <div className="mb-3 flex items-center justify-between">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#5b93e6]/40 bg-[#2454a4]/20">
-                    <Award size={18} className="text-[#5b93e6]" />
+              <div className="border-t border-white/10 bg-gradient-to-br from-[#173a78]/40 to-[#0a1f1c] p-4 md:p-6">
+                <div className="mb-2 md:mb-3 flex items-center justify-between">
+                  <span className="flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full border border-[#5b93e6]/40 bg-[#2454a4]/20">
+                    <Award size={windowWidth < 640 ? 14 : 18} className="text-[#5b93e6]" />
                   </span>
 
                   {c.issuer && (
-                    <span className="text-xs text-white/40">
+                    <span className="text-[10px] md:text-xs text-white/40">
                       {c.issuer}
                     </span>
                   )}
                 </div>
 
                 <h3
-                  className={`${saudiFont.className} text-xl font-bold text-white`}
+                  className={`${saudiFont.className} text-base md:text-xl font-bold text-white`}
                 >
-                  {c.title}
+                  {c.title.length > 30 && windowWidth < 640 
+                    ? `${c.title.slice(0, 30)}...` 
+                    : c.title}
                 </h3>
 
-                <p className="mt-2 text-sm text-white/50">
+                <p className="mt-1 md:mt-2 text-xs md:text-sm text-white/50 line-clamp-2">
                   {c.subtitle}
                 </p>
               </div>
@@ -535,11 +544,12 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
       </div>
 
       {/* أسهم التنقل + المؤشرات */}
-      <div className="mt-2 flex items-center gap-6">
+      <div className="mt-3 md:mt-6 flex items-center gap-3 md:gap-6">
         <button
           onClick={() => goTo(-1)}
           className="
-            flex h-11 w-11 cursor-pointer
+            flex h-9 w-9 md:h-11 md:w-11
+            cursor-pointer
             items-center justify-center
             rounded-full
             border border-white/15
@@ -547,22 +557,23 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
             transition
             hover:border-[#5b93e6]/50
             hover:text-[#5b93e6]
+            active:scale-90
           "
           aria-label="السابق"
         >
-          <ChevronRight size={22} />
+          <ChevronRight size={windowWidth < 640 ? 18 : 22} />
         </button>
 
         {/* مؤشرات النقاط */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 md:gap-2">
           {items.map((_, i) => (
             <button
               key={i}
               onClick={() => setIndex(i)}
-              className={`h-2 rounded-full transition-all ${
+              className={`h-1.5 md:h-2 rounded-full transition-all ${
                 i === index
-                  ? "w-6 bg-[#5b93e6]"
-                  : "w-2 bg-white/20"
+                  ? `w-4 md:w-6 bg-[#5b93e6] ${windowWidth >= 640 ? 'shadow-[0_0_12px_#5b93e680]' : ''}`
+                  : "w-1.5 md:w-2 bg-white/20 hover:bg-white/40"
               }`}
               aria-label={`شهادة ${i + 1}`}
             />
@@ -572,7 +583,8 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
         <button
           onClick={() => goTo(1)}
           className="
-            flex h-11 w-11 cursor-pointer
+            flex h-9 w-9 md:h-11 md:w-11
+            cursor-pointer
             items-center justify-center
             rounded-full
             border border-white/15
@@ -580,17 +592,23 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
             transition
             hover:border-[#5b93e6]/50
             hover:text-[#5b93e6]
+            active:scale-90
           "
           aria-label="التالي"
         >
-          <ChevronLeft size={22} />
+          <ChevronLeft size={windowWidth < 640 ? 18 : 22} />
         </button>
+      </div>
+
+      {/* عداد الشهادات - للشاشات الصغيرة */}
+      <div className="mt-2 md:mt-3 text-xs text-white/30">
+        {index + 1} / {total}
       </div>
 
       {/* ===== Popup لعرض الشهادة ===== */}
       {selectedCertificate && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-2 md:p-4 backdrop-blur-sm"
           onClick={() => setSelectedCertificate(null)}
         >
           <motion.div
@@ -598,26 +616,34 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.25 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-2xl border border-white/10 bg-[#0b1d15]"
+            className="relative max-h-[90vh] w-[95%] md:w-full max-w-4xl overflow-hidden rounded-xl md:rounded-2xl border border-white/10 bg-[#0b1d15]"
           >
             {/* زر الإغلاق */}
             <button
               onClick={() => setSelectedCertificate(null)}
-              className="absolute left-4 top-4 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-black/50 text-white backdrop-blur transition-all hover:scale-110 hover:bg-[#d00000]"
+              className="absolute left-2 top-2 md:left-4 md:top-4 z-10 flex h-8 w-8 md:h-10 md:w-10 cursor-pointer items-center justify-center rounded-full bg-black/50 text-white backdrop-blur transition-all hover:scale-110 hover:bg-[#d00000]"
               aria-label="إغلاق"
             >
-              <X size={20} />
+              <X size={windowWidth < 640 ? 16 : 20} />
             </button>
 
             {/* الصورة بالحجم الكامل */}
-            <div className="relative flex h-[80vh] w-full items-center justify-center bg-white/[0.03] p-6 md:p-10">
+            <div className="relative flex h-[60vh] md:h-[80vh] w-full items-center justify-center bg-white/[0.03] p-4 md:p-10">
               <Image
                 src={selectedCertificate.image}
                 alt={selectedCertificate.title}
                 fill
                 draggable={false}
                 className="object-contain"
+                sizes="(max-width: 640px) 95vw, 1024px"
               />
+            </div>
+
+            {/* معلومات سريعة تحت الصورة للشاشات الصغيرة */}
+            <div className="md:hidden absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+              <p className="text-center text-xs text-white/60">
+                {selectedCertificate.title}
+              </p>
             </div>
           </motion.div>
         </div>
