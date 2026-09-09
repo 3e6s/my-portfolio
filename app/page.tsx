@@ -318,7 +318,7 @@ const CERTIFICATES = [
     title: "شهادة اجتياز معسكر تطوير المواقع باستخدام ASP.NET Core MVC",
     subtitle: "Web Development Bootcamp using ASP.NET Core MVC",
     issuer: "أكاديمية طويق (Tuwaiq Academy)",
-    image: "/ASP.NET.jpg", 
+    image: "/ASP.net.jpg", 
   },
   
   {
@@ -340,8 +340,57 @@ const CERTIFICATES = [
     image: "/شكر وتقدير التقنية.jpg", 
   },
 ];
+const RECOMMENDATIONS = [
+  {
+    name: "Fahad Alqunaieer",
+    title: "Business Enabler | Innovation | Empowering Teams | Driving Digital Transformation",
+    relation: "Fahad was senior to Fahad but didn’t manage Fahad directly",
+    date: "June 9, 2026",
+    image: "/Fahadalq.jpg",
+    text: "Fahad is a committed and ambitious young professional who consistently demonstrated responsibility, professionalism, and a strong willingness to learn throughout his training. He has great potential and a bright future ahead.",
+  },
+  {
+    name: "Raed AlHajlah, MSc, ITIL®",
+    title: "Enterprise Architect | IT governance | Digital Transformation | Emerging Technologies Enabler",
+    relation: "Raed managed Fahad directly",
+    date: "June 9, 2026",
+    image: "/Raed.png", 
+    text: "I had the pleasure of working with Fahad as part of our Digital Projects team. He stood out for his eagerness to learn, strong work ethic, and outstanding character. Fahad added real value to the team and I highly recommended to be part of team.",
+  },
+    {
+    name: "Eman Alyabsi, PMP® (C-KPIP)",
+    title: "Project Manager | Digital Transformation | Agile | Stakeholder Management | Risk Management | Governance | Performance",
+    relation: "Eman was senior to Fahad but didn’t manage Fahad directly",
+    date: "June 8, 2026",
+    image: "/Eman.png", 
+    text: "Fahad is a proactive and collaborative professional with a strong sense of responsibility. During his internship, he consistently showed initiative, commitment, and a willingness to learn. He is a reliable team player and a valuable contributor to any team",
+  },
+   {
+    name: "Mai Bader Almutairi",
+    title: "Senior DevOps Engineer @ SCFHS",
+    relation: "Mai worked with Fahad on the same team",
+    date: "June 9, 2026",
+    image: "/Mai.jpg", 
+    text: "Fahad is a highly motivated and dependable professional who consistently demonstrates commitment, accountability, and a strong willingness to learn. He approaches challenges with a positive mindset, adapts quickly, and contributes effectively within a team environment. His professionalism and proactive attitude make him a valuable asset to any organization.",
+  },
+  {
+    name: "Salah Alayyad",
+    title: "Digital Project Specialist at SCFHS | Enterprise Architecture | Digital Transformation",
+    relation: "Salah worked with Fahad on the same team",
+    date: "June 8, 2026",
+    image: "/Salah.jpg", 
+    text: "It was great working with Fahad during his internship in the Digital Projects Department. He was always eager to learn, open to feedback, and willing to take on new challenges. Fahad brought a positive attitude to the team and was a pleasure to work with. I wish him all the best in his future career.",
+  },
+     {
+    name: "Qutaiba Hamdoudeh PMP PfMP ITIL",
+    title: "Senior Digital Transformation & PMO Professional | PMP®, PfMP®, ITIL® | Portfolio, Program & Project Management | AI & Innovation | IT Governance | Business Transformation | Saudi Commission for Health Specialties",
+    relation: "Qutaiba worked with Fahad on the same team",
+    date: "June 9, 2026",
+    image: "/Quataibah.png", 
+    text: "HI\nI highly recommend Fahad as a dedicated and reliable professional. He consistently demonstrates strong work ethic, professionalism, and a commitment to excellence. Fahad is an effective team player with excellent communication and problem-solving skills. I am confident he will be a valuable asset to any organization and wish him continued success.",
+  },  
+];
 
-// ---------- مكوّن قسم عام يُعاد استخدامه ----------
 // ---------- مكوّن قسم عام يُعاد استخدامه ----------
 function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
   const [index, setIndex] = useState(0);
@@ -573,6 +622,68 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
           </motion.div>
         </div>
       )}
+    </div>
+  );
+}
+
+// ============ 2. المكوّن (Component) ============
+function RecommendationsSection({ items }: { items: typeof RECOMMENDATIONS }) {
+  return (
+    <div className="grid gap-6 md:grid-cols-2">
+      {items.map((rec, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, delay: i * 0.15 }}
+          // أضفنا dir="ltr" هنا ليعكس كل شيء داخل البطاقة
+          dir="ltr"
+          className="group relative overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] p-6 transition duration-300 hover:border-[#5b93e6]/30 hover:bg-white/[0.05] md:p-8"
+        >
+          {/* علامة الاقتباس الزخرفية (مصغرة وبداخل البطاقة) */}
+          <div className="pointer-events-none absolute left-4 top-3 select-none text-5xl font-black leading-none text-[#5b93e6]/15">
+            &ldquo;
+          </div>
+
+          {/* الرأس: الصورة والاسم (اتجاه طبيعي لليسار) */}
+          <div className="mb-6 flex items-center gap-4">
+            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full border border-[#5b93e6]/30 bg-[#2454a4]/20">
+              <Image
+                src={rec.image}
+                alt={rec.name}
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="min-w-0">
+              <h3 className={`${saudiFont.className} truncate text-lg font-bold text-white text-left`}>
+                {rec.name}
+              </h3>
+              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-white/50 text-left">
+                {rec.title}
+              </p>
+            </div>
+          </div>
+
+          {/* العلاقة والتاريخ (اتجاه طبيعي لليسار) */}
+          <div className="mb-4 flex flex-wrap items-center gap-3 text-xs text-white/40">
+            <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-left">
+              {rec.relation}
+            </span>
+            <span className="text-left">{rec.date}</span>
+          </div>
+
+          {/* نص التوصية (اتجاه طبيعي لليسار) */}
+          <div className="relative z-10">
+            {rec.text.split("\n").map((line, idx) => (
+              <p key={idx} className="mb-3 text-sm leading-relaxed text-white/70 text-left">
+                {line}
+              </p>
+            ))}
+          </div>
+        </motion.div>
+      ))}
     </div>
   );
 }
@@ -1220,6 +1331,10 @@ export default function Home() {
           <CertificatesCarousel items={CERTIFICATES} />
         </Section>
 
+        {/* ===== recommendations ===== */}
+        `<Section id="recommendations" icon={MessageSquare} title="شهادات التزكية المهنية" subtitle="ماذا قال مدرائي وزملائي عني">
+          <RecommendationsSection items={RECOMMENDATIONS} />
+        </Section>`
         {/* ===== Contact ===== */}
              <Section id="contact" icon={MessageSquare} title="لنصنع شيئاً رائعاً" subtitle="تواصل معي">
           <div className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-l from-[#173a78]/40 to-[#0b1d15]">
