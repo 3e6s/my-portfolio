@@ -342,20 +342,20 @@ const CERTIFICATES = [
 ];
 const RECOMMENDATIONS = [
   {
-    name: "Fahad Alqunaieer",
-    title: "Business Enabler | Innovation | Empowering Teams | Driving Digital Transformation",
-    relation: "Fahad was senior to Fahad but didn’t manage Fahad directly",
-    date: "June 9, 2026",
-    image: "/Fahadalq.jpg",
-    text: "Fahad is a committed and ambitious young professional who consistently demonstrated responsibility, professionalism, and a strong willingness to learn throughout his training. He has great potential and a bright future ahead.",
-  },
-  {
     name: "Raed AlHajlah, MSc, ITIL®",
     title: "Enterprise Architect | IT governance | Digital Transformation | Emerging Technologies Enabler",
     relation: "Raed managed Fahad directly",
     date: "June 9, 2026",
     image: "/Raed.png", 
     text: "I had the pleasure of working with Fahad as part of our Digital Projects team. He stood out for his eagerness to learn, strong work ethic, and outstanding character. Fahad added real value to the team and I highly recommended to be part of team.",
+  },
+  {
+    name: "Fahad Alqunaieer",
+    title: "Business Enabler | Innovation | Empowering Teams | Driving Digital Transformation",
+    relation: "Fahad was senior to Fahad but didn’t manage Fahad directly",
+    date: "June 9, 2026",
+    image: "/Fahadalq.jpg",
+    text: "Fahad is a committed and ambitious young professional who consistently demonstrated responsibility, professionalism, and a strong willingness to learn throughout his training. He has great potential and a bright future ahead.",
   },
     {
     name: "Eman Alyabsi, PMP® (C-KPIP)",
