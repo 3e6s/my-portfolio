@@ -432,7 +432,7 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
               key={i}
               className="
                 absolute
-                w-[300px]
+                w-[410px]
                 cursor-pointer
                 select-none
                 overflow-hidden
@@ -444,7 +444,7 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
               "
               animate={{
                 // المسافة بين الكروت
-                x: offset * 280,
+                x: offset * 390,
 
                 // دوران 3D
                 rotateY: offset * -38,
@@ -1332,9 +1332,9 @@ export default function Home() {
         </Section>
 
         {/* ===== recommendations ===== */}
-        `<Section id="recommendations" icon={MessageSquare} title="شهادات التزكية المهنية" subtitle="ماذا قال مدرائي وزملائي عني">
+        <Section id="recommendations" icon={MessageSquare} title="شهادات التزكية المهنية" subtitle="ماذا قال مدرائي وزملائي عني">
           <RecommendationsSection items={RECOMMENDATIONS} />
-        </Section>`
+        </Section>
         {/* ===== Contact ===== */}
              <Section id="contact" icon={MessageSquare} title="لنصنع شيئاً رائعاً" subtitle="تواصل معي">
           <div className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-l from-[#173a78]/40 to-[#0b1d15]">
