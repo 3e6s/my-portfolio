@@ -705,16 +705,17 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
                     </span>
                   )}
                 </div>
-
-                <h3 dir={textDirection}
-                  className={`${saudiFont.className} text-base md:text-xl font-bold text-white`}
+                <h3
+                  dir={textDirection}
+                  className={`${saudiFont.className} whitespace-normal break-words text-base font-bold leading-relaxed text-white md:text-xl`}
                 >
-                  {tr(c.title).length > 30 && windowWidth < 640 
-                    ? `${tr(c.title).slice(0, 30)}...` 
-                    : tr(c.title)}
+                  {tr(c.title)}
                 </h3>
 
-                <p dir={textDirection} className="mt-1 md:mt-2 text-xs md:text-sm text-white/50 line-clamp-2">
+                <p
+                  dir={textDirection}
+                  className="mt-1 whitespace-normal break-words text-xs leading-relaxed text-white/50 md:mt-2 md:text-sm"
+                >
                   {tr(c.subtitle)}
                 </p>
               </div>
@@ -835,9 +836,9 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
 // ============ 2. المكوّن (Component) ============
 function RecommendationsSection({
   items,
-}: {
-  items: typeof RECOMMENDATIONS;
-}) {
+  }: {
+    items: typeof RECOMMENDATIONS;
+  }) {
   const { language } = useTranslation();
 
   const arabicRecommendations: Record<
@@ -862,7 +863,7 @@ function RecommendationsSection({
       title:
         "تمكين الأعمال | الابتكار | تمكين الفرق | قيادة التحول الرقمي",
       relation:
-        "كان فهد القنيعر أعلى من فهد في المستوى الوظيفي، لكنه لم يكن مديره المباشر",
+        "كان فهد القنيعير أعلى من فهد في المستوى الوظيفي، لكنه لم يكن مديره المباشر",
       date: "9 يونيو 2026",
       text:
         "فهد مهني شاب ملتزم وطموح، أظهر باستمرار حسًا بالمسؤولية واحترافية ورغبة قوية في التعلم طوال فترة تدريبه. يمتلك إمكانات كبيرة، وينتظره مستقبل مشرق.",
@@ -911,14 +912,24 @@ function RecommendationsSection({
       {items.map((rec, i) => {
         // الإنجليزية: استخدام البيانات الأصلية دون تغيير.
         // العربية: استبدال الحقول المترجمة فقط.
-        const content =
-          language === "ar"
-            ? {
-                ...rec,
-                ...arabicRecommendations[rec.image],
-              }
-            : rec;
+          const profile = recommendationProfiles[rec.image];
+          const arabic = arabicRecommendations[rec.image];
 
+          const content = {
+            ...rec,
+
+            ...(language === "ar" ? arabic : {}),
+
+            name:
+              language === "ar"
+                ? profile?.nameAr ?? rec.name
+                : rec.name,
+
+            title:
+              language === "ar"
+                ? profile?.titleAr ?? arabic?.title ?? rec.title
+                : profile?.titleEn ?? rec.title,
+          };
         const direction = language === "ar" ? "rtl" : "ltr";
 
         return (
@@ -942,20 +953,20 @@ function RecommendationsSection({
               <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full border border-[#5b93e6]/30 bg-[#2454a4]/20">
                 <Image
                   src={rec.image}
-                  alt={rec.name}
+                  alt={content.name}
                   fill
                   className="object-cover"
                 />
               </div>
 
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <h3
-                  className={`${saudiFont.className} truncate text-start text-lg font-bold text-white`}
+                  className={`${saudiFont.className} whitespace-normal break-words text-start text-lg font-bold text-white`}
                 >
-                  <bdi dir="auto">{rec.name}</bdi>
+                  <bdi dir="auto">{content.name}</bdi>
                 </h3>
 
-                <p className="mt-1 line-clamp-2 text-start text-xs leading-relaxed text-white/50">
+                <p className="mt-1 whitespace-normal break-words text-start text-xs leading-relaxed text-white/50">
                   {content.title}
                 </p>
               </div>
@@ -1017,6 +1028,50 @@ function Section({
     </section>
   );
 }
+const recommendationProfiles: Record<
+  string,
+  {
+    nameAr: string;
+    titleAr: string;
+    titleEn: string;
+  }
+> = {
+  "/Raed.png": {
+    nameAr: "رائد الهجله",
+    titleAr: "مدير عام البنية المؤسسية",
+    titleEn: "General Manager of Enterprise Architecture",
+  },
+
+  "/Fahadalq.jpg": {
+    nameAr: "فهد القنيعير",
+    titleAr: "مدير عام حلول الأعمال والابتكار الرقمي",
+    titleEn: "General Manager of Business Solutions and Digital Innovation",
+  },
+
+  "/Eman.png": {
+    nameAr: "ايمان اليابسي",
+    titleAr: "مديرة مشاريع",
+    titleEn: "Project Manager",
+  },
+
+  "/Mai.jpg": {
+    nameAr: "مي المطيري",
+    titleAr: "مهندسة أولى للتطوير والعمليات",
+    titleEn: "Senior DevOps Engineer",
+  },
+
+  "/Salah.jpg": {
+    nameAr: "صلاح ال عياض",
+    titleAr: "أخصائي مشاريع رقمية",
+    titleEn: "Digital Project Specialist",
+  },
+
+  "/Quataibah.png": {
+    nameAr: "قتيبة حمودة",
+    titleAr: "مدير مشاريع رقمية",
+    titleEn: "Digital Project Manager",
+  },
+};
 
 // ---------- المكوّن الرئيسي ----------
 
@@ -1158,17 +1213,22 @@ function PortfolioPage({ onToggleLanguage }: { onToggleLanguage: () => void }) {
             className="hidden rounded-full border border-[#d1af6f]/40 bg-[#d1af6f]/10 px-5 py-2 text-sm font-bold text-[#f0d9a8] transition hover:bg-[#d1af6f]/20 xl:block"
           >
             {tr("تواصل معي")}{" "}</a>
-
-
-          <button
+            <button
             type="button"
             onClick={onToggleLanguage}
-            aria-label={language === "ar" ? "Switch to English" : "التبديل إلى العربية"}
-            lang={language === "ar" ? "en" : "ar"}
-            dir={language === "ar" ? "ltr" : "rtl"}
-            className="hidden xl:inline-flex shrink-0 rounded-lg border border-[#d1af6f]/40 bg-[#d1af6f]/10 px-3 py-2 text-sm font-semibold text-[#f0d9a8] transition hover:bg-[#d1af6f]/20 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d1af6f]"
+            aria-label={
+              language === "ar"
+                ? "Switch to English"
+                : "التبديل إلى العربية"
+            }
+            className="hidden xl:inline-flex shrink-0 items-center justify-center rounded-lg border border-[#d1af6f]/40 bg-[#d1af6f]/10 px-3 py-2 text-sm font-semibold text-[#f0d9a8] transition hover:bg-[#d1af6f]/20 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d1af6f]"
           >
-            {language === "ar" ? "English" : "العربية"}
+            <span
+              lang={language === "ar" ? "en" : "ar"}
+              dir={language === "ar" ? "ltr" : "rtl"}
+            >
+              {language === "ar" ? "English" : "العربية"}
+            </span>
           </button>
 
           <button
@@ -1260,16 +1320,23 @@ function PortfolioPage({ onToggleLanguage }: { onToggleLanguage: () => void }) {
           {tr("الموقع تحت التحسين")}{" "}</span>
       </motion.p>
               
-      <motion.h1 dir={textDirection} 
-        className={`${saudiFont.className} flex flex-wrap items-baseline gap-3 text-5xl font-black leading-[1.15] md:text-7xl`}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.6 }}
-      >
-        <span dir={textDirection} className="text-white">{tr("فهد")}</span>
-        <span dir={textDirection} className="bg-gradient-to-l from-[#5b93e6] via-[#3f7d52] to-[#2454a4] bg-clip-text text-transparent">
-          {tr("الفهيد")}{" "}</span>
-      </motion.h1>
+        <motion.h1
+          dir={textDirection}
+          className={`${saudiFont.className} flex flex-wrap items-baseline gap-3 font-black leading-[1.15] ${
+            language === "en"
+              ? "text-3xl md:text-5xl"
+              : "text-5xl md:text-7xl"
+          }`}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+        >
+          <span className="text-white">{tr("فهد")}</span>
+
+          <span className="bg-gradient-to-l from-[#5b93e6] via-[#3f7d52] to-[#2454a4] bg-clip-text text-transparent">
+            {tr("الفهيد")}
+          </span>
+        </motion.h1>
       
       <motion.p dir={textDirection} 
         className="mt-6 max-w-xl text-lg leading-relaxed text-white/95"
@@ -1677,13 +1744,23 @@ function PortfolioPage({ onToggleLanguage }: { onToggleLanguage: () => void }) {
                     className="absolute left-4 top-4 text-white/70 transition group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:text-white"
                   />
                 </div>
-                <div className="p-6">
-                  <h3 dir={textDirection} className="text-lg font-bold">{tr(p.title)}</h3>
-                  <p dir={textDirection} className="mt-2 text-sm leading-relaxed text-white/55">{tr(p.description)}</p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {p.tags.map((t) => (
-                      <span key={t} className="rounded-md border border-[#3f7d52]/20 bg-[#3f7d52]/5 px-2.5 py-1 text-xs text-[#8fc79f]">
-                        {t}
+                <div dir={textDirection} className="p-6 text-start">
+                  <h3 className="text-lg font-bold">
+                    {tr(p.title)}
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-relaxed text-white/55">
+                    {tr(p.description)}
+                  </p>
+
+                  <div dir={textDirection} className="mt-4 flex flex-wrap gap-2">
+                    {p.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        dir="ltr"
+                        className="rounded-md border border-[#3f7d52]/20 bg-[#3f7d52]/5 px-2.5 py-1 text-xs text-[#8fc79f]"
+                      >
+                        {tag}
                       </span>
                     ))}
                   </div>
@@ -1729,70 +1806,129 @@ function PortfolioPage({ onToggleLanguage }: { onToggleLanguage: () => void }) {
           <RecommendationsSection items={RECOMMENDATIONS} />
         </Section>
         {/* ===== Contact ===== */}
-             <Section id="contact" icon={MessageSquare} title={tr("لنصنع شيئاً رائعاً")} subtitle={tr("تواصل معي")}>
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-l from-[#173a78]/40 to-[#0b1d15]">
-            <div className="grid gap-8 p-8 md:p-12 lg:grid-cols-[1fr_auto]">
-              <div>
-                <h3 dir={textDirection} className={`${saudiFont.className} text-2xl font-black md:text-3xl`}>
-                  {tr("عندك فكرة مشروع؟")}{" "}
-                  <span dir={textDirection} className="bg-gradient-to-l from-[#5b93e6] to-[#3f7d52] bg-clip-text text-transparent">
-                    {tr("خلينا نحولها لواقع")}{" "}</span>
-                </h3>
-                <p dir={textDirection} className="mt-4 max-w-lg leading-relaxed text-white/60">
-                  {tr("متاح للعمل الحر والفرص الوظيفية. راسلني على البريد أو تواصل معي مباشرة وسأرد عليك في أقرب وقت.")}{" "}</p>
+        <section
+          id="contact"
+          dir={textDirection}
+          className="mx-auto max-w-6xl px-6 py-24"
+        >
+          {/* عنوان القسم */}
+          <div className="mb-12 text-center">
+            <p className="mb-3 flex items-center justify-center gap-2 text-sm font-medium text-[#5b93e6]">
+              <MessageSquare size={16} />
+              {tr("تواصل معي")}
+            </p>
 
-                <div className="mt-8 flex flex-wrap gap-3">
-                  <a dir={textDirection}
+            <h2
+              className={`${saudiFont.className} font-bold leading-tight ${
+                language === "en"
+                  ? "text-2xl md:text-3xl"
+                  : "text-3xl md:text-4xl"
+              }`}
+            >
+              {tr("لنصنع شيئاً رائعاً")}
+            </h2>
+          </div>
+
+          {/* كرت التواصل */}
+          <div className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-l from-[#173a78]/40 to-[#0b1d15]">
+            <div className="grid items-start gap-8 p-6 md:p-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,320px)]">
+              {/* العنوان والفقرة والأزرار */}
+              <div className="min-w-0 text-start">
+                <h3
+                  className={`${saudiFont.className} font-bold leading-relaxed ${
+                    language === "en"
+                      ? "text-lg md:text-xl"
+                      : "text-xl md:text-2xl"
+                  }`}
+                >
+                  {tr("عندك فكرة مشروع؟")}{" "}
+                  <span className="bg-gradient-to-l from-[#5b93e6] to-[#3f7d52] bg-clip-text text-transparent">
+                    {tr("خلينا نحولها لواقع")}
+                  </span>
+                </h3>
+
+                <p className="me-auto mt-4 max-w-lg text-start text-sm leading-relaxed text-white/60">
+                  {tr(
+                    "متاح للعمل الحر والفرص الوظيفية. راسلني على البريد أو تواصل معي مباشرة وسأرد عليك في أقرب وقت."
+                  )}
+                </p>
+
+                <div className="mt-6 flex flex-wrap justify-start gap-3">
+                  <a
                     href={LINKS.linkedin}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm transition hover:border-[#5b93e6]/50 hover:text-[#5b93e6]"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm transition hover:border-[#5b93e6]/50 hover:text-[#5b93e6]"
                   >
-                    <LinkedinIcon /> LinkedIn
+                    <LinkedinIcon />
+                    <span dir="ltr">LinkedIn</span>
                   </a>
-                  <a dir={textDirection}
+
+                  <a
                     href={LINKS.github}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm transition hover:border-white/40 hover:text-white"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm transition hover:border-white/40 hover:text-white"
                   >
-                    <GithubIcon /> GitHub
+                    <GithubIcon />
+                    <span dir="ltr">GitHub</span>
                   </a>
                 </div>
               </div>
-              <div className="flex flex-col justify-center gap-4">
+
+              {/* بيانات التواصل */}
+              <div className="flex min-w-0 flex-col gap-3 text-start">
                 <a
                   href={`mailto:${LINKS.email}`}
-                  className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-6 py-4 transition hover:border-[#5b93e6]/40"
+                  className="flex min-w-0 items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-4 transition hover:border-[#5b93e6]/40"
                 >
-                  <Mail size={20} className="text-[#5b93e6]" />
-                  <div>
-                    <p dir={textDirection} className="text-xs text-white/45">{tr("البريد الإلكتروني")}</p>
-                    <p className="text-sm font-semibold" dir="ltr">{LINKS.email}</p>
+                  <Mail size={20} className="shrink-0 text-[#5b93e6]" />
+
+                  <div className="min-w-0">
+                    <p className="text-xs text-white/45">
+                      {tr("البريد الإلكتروني")}
+                    </p>
+
+                    <p className="mt-1 break-words text-sm font-semibold">
+                      <bdi dir="ltr">{LINKS.email}</bdi>
+                    </p>
                   </div>
                 </a>
+
                 <a
                   href={`tel:${LINKS.phone}`}
-                  className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-6 py-4 transition hover:border-[#5b93e6]/40"
+                  className="flex min-w-0 items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-4 transition hover:border-[#5b93e6]/40"
                 >
-                
-                  <Phone size={20} className="text-[#5b93e6]" />
-                  <div>
-                    <p dir={textDirection} className="text-xs text-white/45">{tr("الجوال")}</p>
-                    <p className="text-sm font-semibold" dir="ltr">{LINKS.phoneDisplay}</p>
+                  <Phone size={20} className="shrink-0 text-[#5b93e6]" />
+
+                  <div className="min-w-0">
+                    <p className="text-xs text-white/45">
+                      {tr("الجوال")}
+                    </p>
+
+                    <p className="mt-1 text-sm font-semibold">
+                      <bdi dir="ltr">{LINKS.phoneDisplay}</bdi>
+                    </p>
                   </div>
                 </a>
-                <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-6 py-4">
-                  <MapPin size={20} className="text-[#5b93e6]" />
-                  <div>
-                    <p dir={textDirection} className="text-xs text-white/45">{tr("الموقع")}</p>
-                    <p dir={textDirection} className="text-sm font-semibold">{tr("الرياض، السعودية")}</p>
+
+                <div className="flex min-w-0 items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-4">
+                  <MapPin size={20} className="shrink-0 text-[#5b93e6]" />
+
+                  <div className="min-w-0">
+                    <p className="text-xs text-white/45">
+                      {tr("الموقع")}
+                    </p>
+
+                    <p className="mt-1 text-sm font-semibold">
+                      {tr("الرياض، السعودية")}
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </Section>
+        </section>
       </main>
       {/* ===== Modal تفاصيل المشروع ===== */}
       {selectedProject?.details && (
@@ -1830,7 +1966,7 @@ function PortfolioPage({ onToggleLanguage }: { onToggleLanguage: () => void }) {
             </div>
 
             {/* المحتوى */}
-            <div className="p-6 md:p-8">
+            <div dir={textDirection} className="p-6 text-start md:p-8">
               <h3 dir={textDirection} className={`${saudiFont.className} text-2xl font-black md:text-3xl`}>
                 {tr(selectedProject.title)}
               </h3>
@@ -1856,16 +1992,20 @@ function PortfolioPage({ onToggleLanguage }: { onToggleLanguage: () => void }) {
                 </ul>
               </div>
 
-              <div className="mt-6 flex flex-wrap gap-2">
-                {selectedProject.details.tools.map((t) => (
-                  <span
-                    key={t}
-                    className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-sm text-white/75"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
+                <div
+                  dir={textDirection}
+                  className="mt-6 flex flex-wrap gap-2"
+                >
+                  {selectedProject.details.tools.map((tool) => (
+                    <span
+                      key={tool}
+                      dir="ltr"
+                      className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-sm text-white/75"
+                    >
+                      {tool}
+                    </span>
+                  ))}
+                </div>
             </div>
           </motion.div>
         </div>
