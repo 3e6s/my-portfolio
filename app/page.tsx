@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, createContext, useContext } from "react";
 import Image from "next/image";
 import { Analytics } from "@vercel/analytics/next"
 import {
@@ -44,6 +44,185 @@ function LinkedinIcon({ size = 17 }: { size?: number }) {
 import { saudiFont, ibmPlexArabic } from "./fonts";
 
 
+
+
+// English translations. Arabic content below remains the source of truth.
+// Add a matching English entry here whenever you add Arabic text.
+const ENGLISH_TRANSLATIONS: Record<string, string> = {
+  "نبذة": "About",
+  "الخبرة": "Experience",
+  "المشاريع": "Projects",
+  "المهارات": "Skills",
+  "تواصل": "Contact",
+  "الشهادات": "Certificates",
+  "مشاريع تقنية": "Technical projects",
+  "شهادة معتمدة": "Professional certification",
+  "الخبرة سنة واحدة تدريبية": "One year of training experience",
+  "التطوير": "Development",
+  "تحليل البيانات": "Data Analysis",
+  "Excel متقدم": "Advanced Excel",
+  "تنظيف البيانات": "Data Cleaning",
+  "إدارة المشاريع": "Project Management",
+  "إدارة المخاطر": "Risk Management",
+  "أجايل": "Agile",
+  "متدرب — المشاريع الرقمية / البنية المؤسسية": "Trainee — Digital Projects / Enterprise Architecture",
+  "الهيئة السعودية للتخصصات الصحية · الرياض": "Saudi Commission for Health Specialties · Riyadh",
+  "نوفمبر 2025 — مايو 2026": "November 2025 — May 2026",
+  "ادارة 3 مشاريع تحوّل رقمي استراتيجية ومواءمة الفرق التقنية والمورّدين": "Managed 3 strategic digital transformation projects and coordinated technical teams and vendors",
+  "المساهمة في إنهاء عقد تقني قائم لصالح حل داخلي وتوفير الموارد المالية": "Contributed to ending an existing technology contract in favor of an in-house solution, saving financial resources",
+  "رفع تقارير أسبوعية للمدير التنفيذي للتقنية وإدارة قصص المستخدم في Azure DevOps": "Prepared weekly reports for the Chief Technology Officer and managed user stories in Azure DevOps",
+  "اكاديمية الذكاء الاصطناعي / متدرب تعاوني — الحوكمة التقنية": "AI Academy / Cooperative Trainee — Technology Governance",
+  "شركة تحكم · الرياض": "Tahakom · Riyadh",
+  "يونيو 2025 — نوفمبر 2025": "June 2025 — November 2025",
+  "تصميم وتسليم حلّي Power BI متكاملين ودمجهما في بوابة BI موحّدة": "Designed and delivered two integrated Power BI solutions and combined them in a unified BI portal",
+  "بناء خط تحليل يغطي أكثر من 70,000 صف عبر 12 شهر": "Built an analytics pipeline covering more than 70,000 rows across 12 months",
+  "تمثيل الشركة في 8 اجتماعات فنية وتحليل +1,250 ردّ على كراسات الشروط": "Represented the company in 8 technical meetings and analyzed more than 1,250 RFP responses",
+  "بكالوريوس هندسة برمجيات": "Bachelor of Science in Software Engineering",
+  "جامعة المستقبل — مرتبة الشرف": "Mustaqbal University — Honors",
+  "تخرج 2025": "Graduated 2025",
+  "معدل تراكمي 4.55/5": "GPA: 4.55/5",
+  "المركز الأول في اختبار جاهزية هندسة البرمجيات (NCAAA) على مستوى كلية الهندسة وعلوم الحاسب": "Ranked first in the Software Engineering Readiness Exam (NCAAA) at the College of Engineering and Computer Science",
+  "دبلوم تقنية شبكات حاسب الي": "Diploma in Computer Network Technology",
+  "الكلية التقنية في بريدة — مرتبة الشرف الأولى": "Technical College in Buraydah — First-Class Honors",
+  "تخرج 2022": "Graduated 2022",
+  "معدل تراكمي 4.89/5": "GPA: 4.89/5",
+  "المركز الثاني على مستوى كلية الحاسب في بريدة": "Ranked second at the College of Computing in Buraydah",
+  "PerformX — نظام إدارة مشاريع بالذكاء الاصطناعي": "PerformX — AI Project Management System",
+  "مشروع التخرج: نظام ويب لإدارة مشاريع البرمجيات يؤتمت تكوين الفرق عبر تكامل OpenAI.": "Graduation project: a web-based software project management system that automates team formation through OpenAI integration.",
+  "نظام إدارة مشاريع برمجية شامل يعالج مشاكل ضعف التنسيق بين العملاء ومدراء المشاريع والموظفين. يستقبل النظام مقترحات العملاء، يدير عروض الأسعار والاتفاقيات، ثم يُشكّل فريق العمل تلقائياً بالاستعانة بـ OpenAI بناءً على تخصص كل موظف وحجم مهامه الحالي.": "A comprehensive software project management system that addresses coordination gaps between clients, project managers, and employees. It receives client proposals, manages quotations and agreements, and automatically forms teams using OpenAI based on each employee’s specialty and current workload.",
+  "قائد الفريق والمساهم التقني الرئيسي في مشروع التخرج ضمن فريق من 4 طلاب للحصول على درجة البكالوريوس في هندسة البرمجيات. توليت قيادة وتنسيق العمل التقني، والمساهمة بشكل مكثف في تصميم معمارية النظام وتطوير الـBackend باستخدام ASP.NET Core، وبناء منطق إدارة المشاريع والمهام، إلى جانب تكامل OpenAI وتطوير أجزاء أساسية من النظام.": "Team leader and main technical contributor in a four-student Software Engineering graduation project. I led and coordinated technical work, contributed extensively to system architecture and backend development using ASP.NET Core, built project and task management logic, and implemented OpenAI integration and other core system features.",
+  "قيادة فريق من 4 طلاب وتنسيق العمل التقني وتوزيع المهام ومتابعة مراحل تطوير المشروع": "Led a team of 4 students, coordinated technical work, assigned tasks, and tracked development progress",
+  "تصميم وتطوير الـBackend باستخدام C# وASP.NET Core وبناء منطق الأعمال الأساسي للنظام": "Designed and developed the backend using C# and ASP.NET Core and implemented core business logic",
+  "تطوير نظام إدارة المشاريع والمهام وفق منهجية Agile/Kanban": "Developed project and task management features following Agile/Kanban practices",
+  "تطوير آلية تكوين فرق العمل تلقائياً عبر OpenAI بناءً على تخصص الموظفين وعبء العمل الحالي": "Built automatic team formation using OpenAI based on employee specialties and current workloads",
+  "تصميم وتنفيذ نظام متكامل لإدارة المقترحات وعروض الأسعار والاتفاقيات بين العميل ومدير المشروع": "Designed and implemented proposal, quotation, and agreement management between clients and project managers",
+  "تطوير لوحات تحكم مخصصة حسب صلاحيات وأدوار المستخدمين (مدير، قائد مشروع، مطوّر، عميل)": "Developed dashboards tailored to user permissions and roles: administrator, project lead, developer, and client",
+  "تصميم قاعدة البيانات وربط النظام بـ PostgreSQL وإدارة العلاقات والبيانات": "Designed the database, integrated PostgreSQL, and managed data and relationships",
+  "المساهمة في تصميم واجهات وتجربة المستخدم وتحويل المتطلبات إلى وظائف قابلة للتنفيذ": "Contributed to UI/UX design and translated requirements into working features",
+  "تنفيذ اختبارات White Box وBlack Box والتحقق من وظائف النظام الأساسية باستخدام Postman": "Performed white-box and black-box testing and verified core system functionality using Postman",
+  "بوابة BI التنفيذية": "Executive BI Portal",
+  "لوحتا Power BI متكاملتان تغطي بيانات الموظفين والمشتريات المفتوحة وتتبع الموردين.": "Two integrated Power BI dashboards covering employee data, open purchase orders, and supplier tracking.",
+  "بوابة تحليلات تنفيذية موحّدة تجمع بين لوحتي Power BI (بيانات الموظفين والمشتريات المفتوحة وتتبع الموردين) في بوابة واحدة، تتيح لصناع القرار متابعة المؤشرات الحيوية دون الحاجة للتنقل بين تقارير متفرقة.": "A unified executive analytics portal combining two Power BI dashboards for employee data, open purchase orders, and supplier tracking. It enables decision-makers to monitor key indicators without switching between separate reports.",
+  "بناء الحل بالكامل من جمع البيانات وتنظيفها إلى تصميم المقاييس ولوحات المعلومات، مع دمجها في بوابة واحدة.": "Built the complete solution, from data collection and cleaning to measure and dashboard design, and integrated the dashboards into one portal.",
+  "دمج أكثر من 30 ملف اكسل لبيانات مختلفة في نموذج موحّد": "Combined more than 30 Excel files containing different datasets into a unified model",
+  "تنظيف وتوحيد البيانات باستخدام Power Query": "Cleaned and standardized data using Power Query",
+  "تغطية بيانات جميع الموظفين بتحديث دوري": "Covered all employee data with regular updates",
+  "تغطية جميع بيانات المشتريات بتحديث دوري": "Covered all procurement data with regular updates",
+  "تصميم مقاييس DAX مخصصة للمؤشرات التنفيذية": "Designed custom DAX measures for executive indicators",
+  "تصميم واجهة مستخدم تفاعلية وسهلة الاستخدام للوحات": "Designed an interactive, easy-to-use dashboard interface",
+  "توفير تجربة مستخدم سلسة عبر دمج لوحتين في بوابة واحدة": "Created a seamless user experience by integrating two dashboards into one portal",
+  "تحسين اتخاذ القرارت بشأن الميزانية والحوكمة المالية من خلال مؤشرات دقيقة وموثوقة": "Improved budget and financial governance decisions through accurate, reliable indicators",
+  "QassimPay — منصة مصرفية رقمية": "QassimPay — Digital Banking Platform",
+  "تطبيق ويب مصرفي يحاكي العمليات الأساسية للحسابات والتحويلات.": "A banking web application that simulates core account and transfer operations.",
+  "منصة مصرفية رقمية تحاكي العمليات الأساسية للخدمات المصرفية، بما في ذلك إدارة الحسابات والتحويلات المالية. تم تطوير المشروع لتطبيق مفاهيم هندسة البرمجيات وتصميم الأنظمة من خلال بناء تجربة مصرفية متكاملة في بيئة عملية.": "A digital banking platform that simulates core banking services, including account management and money transfers. The project applies software engineering and system design concepts through an integrated banking experience in a practical environment.",
+  "تصميم وتطوير التطبيق باستخدام ASP.NET Core MVC مع التركيز على تجربة المستخدم والأمان.": "Designed and developed the application using ASP.NET Core MVC, focusing on user experience and security.",
+  "تطوير منصة تحاكي العمليات المصرفية الأساسية مثل فتح الحسابات وإجراء التحويلات": "Developed a platform that simulates core banking operations, including account opening and transfers",
+  "تصميم واجهة مستخدم سهلة الاستخدام وسريعة": "Designed a fast, easy-to-use interface",
+  "دمج جميع العمليات المصرفية في تطبيق واحد": "Integrated all banking operations into one application",
+  "تطوير أداة تفاعلية لتحويل العملات باستخدام API خارجي لعرض أسعار الصرف الحالية": "Developed an interactive currency converter using an external API to display current exchange rates",
+  "إتاحة إدخال المبلغ وتحديد العملة المصدر والعملة المستهدفة لعرض قيمة التحويل بشكل فوري": "Enabled users to enter an amount and select source and target currencies to instantly view the converted value",
+  "تحسين تجربة المستخدم من خلال تصميم واجهة تفاعلية": "Improved the user experience through interactive interface design",
+  "WSA34 — كأس العالم السعودية 2034": "WSA34 — Saudi Arabia World Cup 2034",
+  "تطبيق ويب خاص بمونديال 2034 ضمن مشاريع أكاديمية طويق.": "A web application for the 2034 World Cup, developed as part of Tuwaiq Academy projects.",
+  "تطبيق ويب خاص بمونديال 2034 ضمن مشروع تخرج معسكر تطوير المواقع بإستخدام ASP.NET Core MVC أكاديمية طويق.": "A web application for the 2034 World Cup, developed as the graduation project for Tuwaiq Academy’s ASP.NET Core MVC web development bootcamp.",
+  "تصميم وتطوير التطبيق بالكامل ضمن متطلبات التخرج من معسكر أكاديمية طويق.": "Designed and developed the entire application to meet Tuwaiq Academy bootcamp graduation requirements.",
+  "تصميم واجهة مستخدم سهلة الاستخدام": "Designed an easy-to-use interface",
+  "تطوير نظام إدارة محتوى فعال": "Developed an effective content management system",
+  "دمج جميع المعلومات المتعلقة بمونديال 2034 في تطبيق واحد": "Combined information about the 2034 World Cup in one application",
+  "لوحة بيانات بسيطة لاظافة المباريات والفرق والنتائج": "Built a simple dashboard for adding matches, teams, and results",
+  "بوت البريد الجماعي": "Bulk Email Bot",
+  "تطبيق سطح مكتب لأتمتة إرسال البريد الإلكتروني الجماعي لجهات الاتصال المؤسسية.": "A desktop application that automates bulk email delivery to corporate contacts.",
+  "تطبيق سطح مكتب يرسل بريداً إلكترونياً جماعياً بشكل منفصل ومخصص لكل مستلم، عبر الاتصال المباشر بحساب Gmail. يسمح بإضافة عدد كبير من المستلمين دفعة واحدة، مع إمكانية تخصيص محتوى الرسالة وإرفاق ملفات استُخدم فعلياً لإرسال طلبات توظيف لعدد من مسؤولي التوظيف.": "A desktop application that sends separate, personalized emails to multiple recipients through a direct Gmail connection. It supports adding large recipient lists, customizing message content, and attaching files. It was used to send job applications to recruitment contacts.",
+  "تصميم وتطوير التطبيق باستخدام C# وربطه بخدمة Gmail لأتمتة عملية الإرسال الجماعي.": "Designed and developed the application using C# and connected it to Gmail to automate bulk email delivery.",
+  "اتصال مباشر بحساب Gmail عبر SMTP/API لإرسال الرسائل": "Connected directly to Gmail through SMTP/API to send messages",
+  "إرسال مخصص ومنفصل لكل مستلم بدلاً من نسخة واحدة جماعية": "Sent separate, personalized messages to each recipient instead of a single group email",
+  "دعم قائمة مستلمين قابلة للتوسع (تجريبياً حتى 180 جهة اتصال)": "Supported an expandable recipient list, tested with up to 180 contacts",
+  "واجهة سطح مكتب بسيطة لإدارة المستلمين ومحتوى الرسالة": "Built a simple desktop interface for managing recipients and message content",
+  "معالجة أخطاء الإرسال وعرض عدد الرسائل التي تم إرسالها بنجاح، مع إظهار تفاصيل الأخطاء للمستلمين الذين تعذر الإرسال إليهم": "Handled delivery errors, displayed the number of successfully sent messages, and provided error details for failed recipients",
+  "تاخير إرسال الرسائل لتجنب حظر الحساب من قبل Gmail عند إرسال عدد كبير من الرسائل في وقت قصير": "Added delays between messages to reduce the risk of Gmail blocking the account during high-volume sending",
+  "TODO — متتبع المهام": "TODO — Task Tracker",
+  "تطبيق ويب لإدارة المهام اليومية بواجهة بسيطة وسريعة.": "A web application for managing daily tasks with a simple, fast interface.",
+  "تطبيق ويب لإدارة المهام اليومية مع امكانية انشاء فرق وتتبع المهام المتأخرة مع تغيير الحالة بشكل تلقائي وارسال رسائل تنبيهية للبريد الاكتروني.": "A web application for managing daily tasks, creating teams, and tracking overdue tasks, with automatic status updates and email notifications.",
+  "تصميم وتطوير التطبيق باستخدام تقنيات الويب الحديثة.": "Designed and developed the application using modern web technologies.",
+  "تطوير نظام إدارة المهام فعال": "Developed an effective task management system",
+  "دمج جميع الميزات المطلوبة في تطبيق واحد": "Integrated all required features into one application",
+  "ارسال رسائل تنبيهية للبريد الاكتروني": "Implemented email notifications",
+  "شهادة الهيئة السعودية للتخصصات الصحية اتمام التدريب": "SCFHS Training Completion Certificate",
+  "شهادة اتمام التدريب التعاوني": "Cooperative Training Completion Certificate",
+  "تدريب تعاوني في الحوكمة التقنية": "Cooperative Training in Technology Governance",
+  "تحكم (Tahakom)": "Tahakom",
+  "شهادة إتمام برنامج Laravel إطار العمل": "Laravel Framework Program Completion Certificate",
+  "شهادة اجتياز معسكر تطوير المواقع باستخدام ASP.NET Core MVC": "ASP.NET Core MVC Web Development Bootcamp Certificate",
+  "أكاديمية طويق (Tuwaiq Academy)": "Tuwaiq Academy",
+  "شهادة اجتياز معسكر الذكاء الاصطناعي التوليدي": "Generative AI Bootcamp Completion Certificate",
+  "خطاب شكر وتقدير - التفوق في اختبار الجاهزية": "Appreciation Letter — Readiness Exam Excellence",
+  "جامعة المستقبل (Mustaqbal University)": "Mustaqbal University",
+  "شكر وتقدير - مكافأة التفوق العلمي": "Academic Excellence Award — Appreciation Certificate",
+  "المؤسسة العامة للتدريب التقني والمهني (TVTC)": "Technical and Vocational Training Corporation (TVTC)",
+  "عرض الشهادة": "View certificate",
+  "السابق": "Previous",
+  "التالي": "Next",
+  "إغلاق": "Close",
+  "فهد الفهيد": "Fahad Alfehaid",
+  "القائمة": "Menu",
+  "الدلة": "Arabic coffee pot",
+  "فنجال القهوة": "Arabic coffee cup",
+  "نبذة عني": "About Me",
+  "من أنا وماذا أقدم": "Who I am and what I offer",
+  "الخبرة والتعليم": "Experience & Education",
+  "مسيرتي المهنية والأكاديمية": "My professional and academic journey",
+  "بكالوريوس": "Bachelor",
+  "دبلوم": "Diploma",
+  "أبرز المشاريع": "Featured Projects",
+  "أعمال أفتخر بها": "Work I’m proud of",
+  "المهارات التقنية": "Technical Skills",
+  "الأدوات التي أتقنها": "Tools I work with",
+  "إنجازات موثقة": "Verified achievements",
+  "شهادات التزكية المهنية": "Professional Recommendations",
+  "ماذا قال مدرائي وزملائي عني": "What my managers and colleagues say about me",
+  "لنصنع شيئاً رائعاً": "Let’s Create Something Great",
+  "تواصل معي": "Contact Me",
+  "فهد": "Fahad",
+  "الفهيد": "Alfehaid",
+  "أهلاً بك في معرض أعمالي": "Welcome to my portfolio",
+  "الموقع تحت التحسين": "Website improvements in progress",
+  "مهندس برمجيات ومحلل بيانات، حاصل على شهادة": "Software engineer and data analyst, certified in",
+  "أبني تطبيقات ويب حديثة وأصمم لوحات معلومات": "I build modern web applications and design dashboards with",
+  "تحوّل البيانات إلى قرارات.": "to turn data into decisions.",
+  "استعرض مشاريعي": "Explore My Projects",
+  "تحميل السيرة الذاتية": "Download CV",
+  "عزنا بطموحنا": "AZNNA by our ambition",
+  "الرياض، السعودية": "Riyadh, Saudi Arabia",
+  "متاح للعمل": "Open to work",
+  "مهندس برمجيات سعودي، خريج بكالوريوس هندسة برمجيات بتقدير ممتاز مع مرتبة الشرف الثانية وايضا حاصل على شهادة الدبلوم في تقنية شبكات الحاسب بتقدير ممتاز مع مرتبة الشرف الأولى. أجمع بين التطوير البرمجي وتحليل البيانات وايضا تطوير الأعمال لتقديم حلول تقنية ذات أثر حقيقي من بناء التطبيقات إلى تصميم لوحات المعلومات التنفيذية.": "A Saudi software engineer with a bachelor’s degree in Software Engineering, graded Excellent with Second-Class Honors, and a diploma in Computer Network Technology, graded Excellent with First-Class Honors. I combine software development, data analysis, and business development to deliver impactful technology solutions, from building applications to designing executive dashboards.",
+  "حاصل على شهادة CAPM® المعتمدة من PMI، وأمتلك خبرة تدريبية في إدارة المشاريع التقنية وإدارة حوكمة التكنولوجيا.": "I hold the CAPM® certification from PMI and have practical training experience in technical project management and technology governance.",
+  "مهارات": "skills",
+  "عندك فكرة مشروع؟": "Have a project in mind?",
+  "خلينا نحولها لواقع": "Let’s bring it to life",
+  "متاح للعمل الحر والفرص الوظيفية. راسلني على البريد أو تواصل معي مباشرة وسأرد عليك في أقرب وقت.": "Available for freelance projects and career opportunities. Email me or get in touch directly, and I’ll respond as soon as possible.",
+  "البريد الإلكتروني": "Email",
+  "الجوال": "Phone",
+  "الموقع": "Location",
+  "دوري في المشروع": "My Role",
+  "أبرز الإنجازات": "Key Achievements",
+  "© 2026 فهد الفهيد — جميع الحقوق محفوظة": "© 2026 Fahad Alfehaid — All rights reserved",
+  "صُنع بشغف في": "Made with passion in",
+  "السعودية": "Saudi Arabia",
+  "شهادة": "Certificate"
+};
+
+type Language = "ar" | "en";
+const LanguageContext = createContext<Language>("ar");
+
+function useTranslation() {
+  const language = useContext(LanguageContext);
+  const textDirection = language === "ar" ? "rtl" : "ltr";
+  const tr = (text: string): string => {
+    if (language === "ar") return text;
+    return ENGLISH_TRANSLATIONS[text.replace(/\s+/g, " ").trim()] ?? text;
+  };
+  return { language, textDirection, tr };
+}
 
 const NAV = [
   { id: "about", label: "نبذة" },
@@ -393,6 +572,7 @@ const RECOMMENDATIONS = [
 
 // ---------- مكوّن قسم عام يُعاد استخدامه ----------
 function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
+  const { tr, textDirection } = useTranslation();
   const [index, setIndex] = useState(0);
   const [selectedCertificate, setSelectedCertificate] = useState<(typeof CERTIFICATES)[number] | null>(null);
   const [windowWidth, setWindowWidth] = useState(0);
@@ -488,7 +668,7 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
               >
                 <Image
                   src={c.image}
-                  alt={c.title}
+                  alt={tr(c.title)}
                   fill
                   draggable={false}
                   className="pointer-events-none object-contain p-3 md:p-4"
@@ -503,7 +683,7 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
                       setSelectedCertificate(c);
                     }}
                     className="absolute inset-0 z-10 flex cursor-pointer items-center justify-center bg-black/50 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100"
-                    aria-label="عرض الشهادة"
+                    aria-label={tr("عرض الشهادة")}
                   >
                     <span className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full border border-white/30 bg-white/10">
                       <Eye size={windowWidth < 640 ? 18 : 24} className="text-white" />
@@ -520,22 +700,22 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
                   </span>
 
                   {c.issuer && (
-                    <span className="text-[10px] md:text-xs text-white/40">
-                      {c.issuer}
+                    <span dir={textDirection} className="text-[10px] md:text-xs text-white/40">
+                      {tr(c.issuer)}
                     </span>
                   )}
                 </div>
 
-                <h3
+                <h3 dir={textDirection}
                   className={`${saudiFont.className} text-base md:text-xl font-bold text-white`}
                 >
-                  {c.title.length > 30 && windowWidth < 640 
-                    ? `${c.title.slice(0, 30)}...` 
-                    : c.title}
+                  {tr(c.title).length > 30 && windowWidth < 640 
+                    ? `${tr(c.title).slice(0, 30)}...` 
+                    : tr(c.title)}
                 </h3>
 
-                <p className="mt-1 md:mt-2 text-xs md:text-sm text-white/50 line-clamp-2">
-                  {c.subtitle}
+                <p dir={textDirection} className="mt-1 md:mt-2 text-xs md:text-sm text-white/50 line-clamp-2">
+                  {tr(c.subtitle)}
                 </p>
               </div>
             </motion.div>
@@ -559,7 +739,7 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
             hover:text-[#5b93e6]
             active:scale-90
           "
-          aria-label="السابق"
+          aria-label={tr("السابق")}
         >
           <ChevronRight size={windowWidth < 640 ? 18 : 22} />
         </button>
@@ -575,7 +755,7 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
                   ? `w-4 md:w-6 bg-[#5b93e6] ${windowWidth >= 640 ? 'shadow-[0_0_12px_#5b93e680]' : ''}`
                   : "w-1.5 md:w-2 bg-white/20 hover:bg-white/40"
               }`}
-              aria-label={`شهادة ${i + 1}`}
+              aria-label={`${tr("شهادة")} ${i + 1}`}
             />
           ))}
         </div>
@@ -594,7 +774,7 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
             hover:text-[#5b93e6]
             active:scale-90
           "
-          aria-label="التالي"
+          aria-label={tr("التالي")}
         >
           <ChevronLeft size={windowWidth < 640 ? 18 : 22} />
         </button>
@@ -622,7 +802,7 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
             <button
               onClick={() => setSelectedCertificate(null)}
               className="absolute left-2 top-2 md:left-4 md:top-4 z-10 flex h-8 w-8 md:h-10 md:w-10 cursor-pointer items-center justify-center rounded-full bg-black/50 text-white backdrop-blur transition-all hover:scale-110 hover:bg-[#d00000]"
-              aria-label="إغلاق"
+              aria-label={tr("إغلاق")}
             >
               <X size={windowWidth < 640 ? 16 : 20} />
             </button>
@@ -631,7 +811,7 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
             <div className="relative flex h-[60vh] md:h-[80vh] w-full items-center justify-center bg-white/[0.03] p-4 md:p-10">
               <Image
                 src={selectedCertificate.image}
-                alt={selectedCertificate.title}
+                alt={tr(selectedCertificate.title)}
                 fill
                 draggable={false}
                 className="object-contain"
@@ -641,8 +821,8 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
 
             {/* معلومات سريعة تحت الصورة للشاشات الصغيرة */}
             <div className="md:hidden absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-              <p className="text-center text-xs text-white/60">
-                {selectedCertificate.title}
+              <p dir={textDirection} className="text-center text-xs text-white/60">
+                {tr(selectedCertificate.title)}
               </p>
             </div>
           </motion.div>
@@ -653,63 +833,159 @@ function CertificatesCarousel({ items }: { items: typeof CERTIFICATES }) {
 }
 
 // ============ 2. المكوّن (Component) ============
-function RecommendationsSection({ items }: { items: typeof RECOMMENDATIONS }) {
+function RecommendationsSection({
+  items,
+}: {
+  items: typeof RECOMMENDATIONS;
+}) {
+  const { language } = useTranslation();
+
+  const arabicRecommendations: Record<
+    string,
+    {
+      title: string;
+      relation: string;
+      date: string;
+      text: string;
+    }
+  > = {
+    "/Raed.png": {
+      title:
+        "معماري مؤسسي | حوكمة تقنية المعلومات | التحول الرقمي | تمكين التقنيات الناشئة",
+      relation: "كان رائد مديرًا مباشرًا لفهد",
+      date: "9 يونيو 2026",
+      text:
+        "سعدت بالعمل مع فهد ضمن فريق المشاريع الرقمية لدينا. وقد تميز بحرصه على التعلم، وأخلاقيات عمله الراسخة، وحسن خلقه. أضاف فهد قيمة حقيقية للفريق، وأوصيت بشدة بانضمامه إلى فريق العمل.",
+    },
+
+    "/Fahadalq.jpg": {
+      title:
+        "تمكين الأعمال | الابتكار | تمكين الفرق | قيادة التحول الرقمي",
+      relation:
+        "كان فهد القنيعر أعلى من فهد في المستوى الوظيفي، لكنه لم يكن مديره المباشر",
+      date: "9 يونيو 2026",
+      text:
+        "فهد مهني شاب ملتزم وطموح، أظهر باستمرار حسًا بالمسؤولية واحترافية ورغبة قوية في التعلم طوال فترة تدريبه. يمتلك إمكانات كبيرة، وينتظره مستقبل مشرق.",
+    },
+
+    "/Eman.png": {
+      title:
+        "مديرة مشاريع | التحول الرقمي | المنهجيات الرشيقة | إدارة أصحاب المصلحة | إدارة المخاطر | الحوكمة | الأداء",
+      relation:
+        "كانت إيمان أعلى من فهد في المستوى الوظيفي، لكنها لم تكن مديرته المباشرة",
+      date: "8 يونيو 2026",
+      text:
+        "فهد مهني مبادر ومتعاون، يتمتع بحس عالٍ بالمسؤولية. خلال فترة تدريبه، أظهر باستمرار روح المبادرة والالتزام والاستعداد للتعلم. وهو عضو في الفريق يمكن الاعتماد عليه، ويقدم إسهامًا قيّمًا لأي فريق.",
+    },
+
+    "/Mai.jpg": {
+      title:
+        "مهندسة أولى للتطوير والعمليات (DevOps) لدى الهيئة السعودية للتخصصات الصحية",
+      relation: "عملت مي مع فهد ضمن الفريق نفسه",
+      date: "9 يونيو 2026",
+      text:
+        "فهد مهني يتمتع بدافعية عالية ويمكن الاعتماد عليه، ويُظهر باستمرار الالتزام وتحمل المسؤولية والرغبة القوية في التعلم. يتعامل مع التحديات بعقلية إيجابية، ويتكيف بسرعة، ويسهم بفاعلية ضمن بيئة العمل الجماعي. إن احترافيته وروح المبادرة لديه تجعلانه إضافة قيّمة لأي منظمة.",
+    },
+
+    "/Salah.jpg": {
+      title:
+        "أخصائي مشاريع رقمية لدى الهيئة السعودية للتخصصات الصحية | البنية المؤسسية | التحول الرقمي",
+      relation: "عمل صلاح مع فهد ضمن الفريق نفسه",
+      date: "8 يونيو 2026",
+      text:
+        "كان العمل مع فهد خلال فترة تدريبه في إدارة المشاريع الرقمية تجربة رائعة. كان دائمًا حريصًا على التعلم، ومتقبلًا للملاحظات، ومستعدًا لخوض تحديات جديدة. أضفى فهد روحًا إيجابية على الفريق، وكان العمل معه ممتعًا. أتمنى له كل التوفيق في مسيرته المهنية المستقبلية.",
+    },
+
+    "/Quataibah.png": {
+      title:
+        "مهني أول في التحول الرقمي ومكتب إدارة المشاريع (PMO) | PMP®، PfMP®، ITIL® | إدارة المحافظ والبرامج والمشاريع | الذكاء الاصطناعي والابتكار | حوكمة تقنية المعلومات | تحول الأعمال | الهيئة السعودية للتخصصات الصحية",
+      relation: "عمل قتيبة مع فهد ضمن الفريق نفسه",
+      date: "9 يونيو 2026",
+      text:
+        "مرحبًا\nأوصي بشدة بفهد بوصفه مهنيًا متفانيًا ويمكن الاعتماد عليه. فهو يُظهر باستمرار أخلاقيات عمل راسخة واحترافية والتزامًا بالتميز. فهد عضو فعّال في الفريق، ويتمتع بمهارات ممتازة في التواصل وحل المشكلات. وأنا واثق بأنه سيكون إضافة قيّمة لأي منظمة، وأتمنى له دوام النجاح.",
+    },
+  };
+
   return (
     <div className="grid gap-6 md:grid-cols-2">
-      {items.map((rec, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, delay: i * 0.15 }}
-          // أضفنا dir="ltr" هنا ليعكس كل شيء داخل البطاقة
-          dir="ltr"
-          className="group relative overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] p-6 transition duration-300 hover:border-[#5b93e6]/30 hover:bg-white/[0.05] md:p-8"
-        >
-          {/* علامة الاقتباس الزخرفية (مصغرة وبداخل البطاقة) */}
-          <div className="pointer-events-none absolute left-4 top-3 select-none text-5xl font-black leading-none text-[#5b93e6]/15">
-            &ldquo;
-          </div>
+      {items.map((rec, i) => {
+        // الإنجليزية: استخدام البيانات الأصلية دون تغيير.
+        // العربية: استبدال الحقول المترجمة فقط.
+        const content =
+          language === "ar"
+            ? {
+                ...rec,
+                ...arabicRecommendations[rec.image],
+              }
+            : rec;
 
-          {/* الرأس: الصورة والاسم (اتجاه طبيعي لليسار) */}
-          <div className="mb-6 flex items-center gap-4">
-            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full border border-[#5b93e6]/30 bg-[#2454a4]/20">
-              <Image
-                src={rec.image}
-                alt={rec.name}
-                fill
-                className="object-cover"
-              />
+        const direction = language === "ar" ? "rtl" : "ltr";
+
+        return (
+          <motion.div
+            key={rec.image}
+            dir={direction}
+            lang={language}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, delay: i * 0.15 }}
+            className="group relative overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] p-6 transition duration-300 hover:border-[#5b93e6]/30 hover:bg-white/[0.05] md:p-8"
+          >
+            {/* علامة الاقتباس */}
+            <div className="pointer-events-none absolute end-4 top-3 select-none text-5xl font-black leading-none text-[#5b93e6]/15">
+              &ldquo;
             </div>
-            <div className="min-w-0">
-              <h3 className={`${saudiFont.className} truncate text-lg font-bold text-white text-left`}>
-                {rec.name}
-              </h3>
-              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-white/50 text-left">
-                {rec.title}
-              </p>
+
+            {/* الصورة والاسم والمسمى المهني */}
+            <div className="mb-6 flex items-center gap-4">
+              <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full border border-[#5b93e6]/30 bg-[#2454a4]/20">
+                <Image
+                  src={rec.image}
+                  alt={rec.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
+              <div className="min-w-0">
+                <h3
+                  className={`${saudiFont.className} truncate text-start text-lg font-bold text-white`}
+                >
+                  <bdi dir="auto">{rec.name}</bdi>
+                </h3>
+
+                <p className="mt-1 line-clamp-2 text-start text-xs leading-relaxed text-white/50">
+                  {content.title}
+                </p>
+              </div>
             </div>
-          </div>
 
-          {/* العلاقة والتاريخ (اتجاه طبيعي لليسار) */}
-          <div className="mb-4 flex flex-wrap items-center gap-3 text-xs text-white/40">
-            <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-left">
-              {rec.relation}
-            </span>
-            <span className="text-left">{rec.date}</span>
-          </div>
+            {/* العلاقة المهنية والتاريخ */}
+            <div className="mb-4 flex flex-wrap items-center gap-3 text-xs text-white/40">
+              <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-start">
+                {content.relation}
+              </span>
 
-          {/* نص التوصية (اتجاه طبيعي لليسار) */}
-          <div className="relative z-10">
-            {rec.text.split("\n").map((line, idx) => (
-              <p key={idx} className="mb-3 text-sm leading-relaxed text-white/70 text-left">
-                {line}
-              </p>
-            ))}
-          </div>
-        </motion.div>
-      ))}
+              <span className="text-start">
+                {content.date}
+              </span>
+            </div>
+
+            {/* نص التزكية */}
+            <div className="relative z-10">
+              {content.text.split("\n").map((line, idx) => (
+                <p
+                  key={idx}
+                  className="mb-3 text-start text-sm leading-relaxed text-white/70"
+                >
+                  {line}
+                </p>
+              ))}
+            </div>
+          </motion.div>
+        );
+      })}
     </div>
   );
 }
@@ -727,14 +1003,15 @@ function Section({
   subtitle: string;
   children: React.ReactNode;
 }) {
+  const { textDirection } = useTranslation();
   return (
     <section id={id} className="mx-auto max-w-6xl px-6 py-24">
       <div className="mb-14 text-center">
-        <p className="mb-3 flex items-center justify-center gap-2 text-sm font-medium text-[#5b93e6]">
+        <p dir={textDirection} className="mb-3 flex items-center justify-center gap-2 text-sm font-medium text-[#5b93e6]">
           <Icon size={16} />
           {subtitle}
         </p>
-        <h2 className={`${saudiFont.className} text-4xl font-black md:text-5xl`}>{title}</h2>
+        <h2 dir={textDirection} className={`${saudiFont.className} text-4xl font-black md:text-5xl`}>{title}</h2>
       </div>
       {children}
     </section>
@@ -744,6 +1021,36 @@ function Section({
 // ---------- المكوّن الرئيسي ----------
 
 export default function Home() {
+  const [language, setLanguage] = useState<Language>("ar");
+
+  useEffect(() => {
+    try {
+      const savedLanguage = localStorage.getItem("portfolio-language");
+      if (savedLanguage === "ar" || savedLanguage === "en") setLanguage(savedLanguage);
+    } catch {
+      // Language switching still works when browser storage is unavailable.
+    }
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
+
+  const toggleLanguage = () => {
+    const nextLanguage = language === "ar" ? "en" : "ar";
+    setLanguage(nextLanguage);
+    try { localStorage.setItem("portfolio-language", nextLanguage); } catch {}
+  };
+
+  return (
+    <LanguageContext.Provider value={language}>
+      <PortfolioPage onToggleLanguage={toggleLanguage} />
+    </LanguageContext.Provider>
+  );
+}
+
+function PortfolioPage({ onToggleLanguage }: { onToggleLanguage: () => void }) {
+  const { language, tr, textDirection } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState("hero");
   const [scrolled, setScrolled] = useState(false);
@@ -769,8 +1076,20 @@ export default function Home() {
   return (
     <div
       dir="rtl"
+      lang={language}
+      data-portfolio-language={language}
       className={`${ibmPlexArabic.className} relative min-h-screen w-full overflow-x-hidden bg-[#0a1f1c] text-slate-100 selection:bg-[#3f7d52]/40`}
     >
+      {/* English font support; original Arabic fonts and structural layout stay intact. */}
+      <style jsx global>{`
+        [data-portfolio-language="en"],
+        [data-portfolio-language="en"] :where(h1, h2, h3, h4, p, span, a, button, li) {
+          font-family: Arial, Helvetica, sans-serif;
+        }
+        [data-portfolio-language="en"] :where(h1, h2, h3, h4, p, a, li) {
+          overflow-wrap: anywhere;
+        }
+      `}</style>
       {/* أنيميشن الدلة والفنجال */}
       <style jsx>{`
         @keyframes floatDallah {
@@ -789,6 +1108,9 @@ export default function Home() {
       <div className="pointer-events-none fixed inset-y-0 left-0 z-40 hidden w-10 opacity-70 lg:block">
         <Image src="/side-line2.png" alt="" fill className="object-cover object-top" />
       </div>
+            <div className="pointer-events-none fixed inset-y-0 right-0 z-40 hidden w-10 opacity-70 lg:block">
+        <Image src="/side-line2.png" alt="" fill className="object-cover object-top" />
+      </div>
 
       {/* ===== Navbar ===== */}
         <header
@@ -800,24 +1122,23 @@ export default function Home() {
       >
         <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <a href="#hero" className="flex items-center gap-4">
-            <Image src="/brand-emblem.png" alt="فهد الفهيد" width={80} height={70} className="rounded-lg" />
-            <span className={`${saudiFont.className} text-xl font-black tracking-wide`}>
-              <span className="text-[#e8cf9f]">فهد</span>
-              <span className="mr-2 bg-gradient-to-l from-[#d1af6f] to-[#7fb069] bg-clip-text text-transparent">
-                الفهيد
-              </span>
+            <Image src="/brand-emblem.png" alt={tr("فهد الفهيد")} width={80} height={70} className="rounded-lg" />
+            <span dir={textDirection} className={`${saudiFont.className} text-xl font-black tracking-wide`}>
+              <span dir={textDirection} className="text-[#e8cf9f]">{tr("فهد")}</span>
+              <span dir={textDirection} className="mr-2 bg-gradient-to-l from-[#d1af6f] to-[#7fb069] bg-clip-text text-transparent">
+                {tr("الفهيد")}{" "}</span>
             </span>
           </a>
 
-          <ul className="hidden items-center gap-4 md:flex">
+          <ul className="hidden items-center gap-4 xl:flex">
             {NAV.map((n, idx) => (
               <li key={n.id} className="flex items-center gap-4">
                 {idx !== 0 && (
-                  <span className="text-[#7fb069]" aria-hidden>
+                  <span dir={textDirection} className="text-[#7fb069]" aria-hidden>
                     ◆
                   </span>
                 )}
-                <a
+                <a dir={textDirection}
                   href={`#${n.id}`}
                   onClick={() => setActive(n.id)}
                   className={`text-sm transition-colors ${
@@ -826,48 +1147,72 @@ export default function Home() {
                       : "text-[#d1af6f]/80 hover:text-[#f0d9a8]"
                   }`}
                 >
-                  {n.label}
+                  {tr(n.label)}
                 </a>
               </li>
             ))}
           </ul>
 
-          <a
+          <a dir={textDirection}
             href="#contact"
-            className="hidden rounded-full border border-[#d1af6f]/40 bg-[#d1af6f]/10 px-5 py-2 text-sm font-bold text-[#f0d9a8] transition hover:bg-[#d1af6f]/20 md:block"
+            className="hidden rounded-full border border-[#d1af6f]/40 bg-[#d1af6f]/10 px-5 py-2 text-sm font-bold text-[#f0d9a8] transition hover:bg-[#d1af6f]/20 xl:block"
           >
-            تواصل معي
-          </a>
+            {tr("تواصل معي")}{" "}</a>
+
+
+          <button
+            type="button"
+            onClick={onToggleLanguage}
+            aria-label={language === "ar" ? "Switch to English" : "التبديل إلى العربية"}
+            lang={language === "ar" ? "en" : "ar"}
+            dir={language === "ar" ? "ltr" : "rtl"}
+            className="hidden xl:inline-flex shrink-0 rounded-lg border border-[#d1af6f]/40 bg-[#d1af6f]/10 px-3 py-2 text-sm font-semibold text-[#f0d9a8] transition hover:bg-[#d1af6f]/20 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d1af6f]"
+          >
+            {language === "ar" ? "English" : "العربية"}
+          </button>
 
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="rounded-lg p-2 text-[#d1af6f] hover:bg-white/5 md:hidden"
-            aria-label="القائمة"
+            className="rounded-lg p-2 text-[#d1af6f] hover:bg-white/5 xl:hidden"
+            aria-label={tr("القائمة")}
           >
             {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </nav>
 
         {menuOpen && (
-          <div className="border-t border-white/5 bg-[#0b1d15] px-6 py-4 md:hidden">
+          <div className="border-t border-white/5 bg-[#0b1d15] px-6 py-4 xl:hidden">
             {NAV.map((n) => (
-              <a
+              <a dir={textDirection}
                 key={n.id}
                 href={`#${n.id}`}
                 onClick={() => setMenuOpen(false)}
                 className="block rounded-lg px-3 py-2.5 text-sm text-[#d1af6f] hover:bg-white/5 hover:text-[#f0d9a8]"
               >
-                {n.label}
+                {tr(n.label)}
               </a>
             ))}
+          <button
+            type="button"
+            onClick={onToggleLanguage}
+            aria-label={language === "ar" ? "Switch to English" : "التبديل إلى العربية"}
+            lang={language === "ar" ? "en" : "ar"}
+            dir={language === "ar" ? "ltr" : "rtl"}
+            className="shrink-0 rounded-lg border border-[#d1af6f]/40 bg-[#d1af6f]/10 px-3 py-2 text-sm font-semibold text-[#f0d9a8] transition hover:bg-[#d1af6f]/20 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d1af6f]"
+          >
+            {language === "ar" ? "English" : "العربية"}
+          </button>
           </div>
         )}
       </header>
 
       <main className="relative">
         {/* ===== Hero ===== */}
-<section id="hero" className="relative flex min-h-screen items-center pt-16 overflow-hidden">
-  
+        <section id="hero" dir={textDirection} className="relative flex min-h-screen items-center pt-16 overflow-hidden" >
+  <div
+  className="hidden lg:block"
+  style={{transform: language === "en" ? "scaleX(-1)" : "none", }}> 
+  </div>
   {/* خلفية متحركة */}
     <motion.div 
       className="absolute inset-0 -z-10"
@@ -900,47 +1245,43 @@ export default function Home() {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <motion.p 
-        className="mb-4 flex items-center gap-2 text-sm font-medium text-[#5b93e6]"
+      <motion.p dir={textDirection} 
+        className={`mb-4 flex items-center gap-2 text-sm font-medium text-[#5b93e6] ${language === "en" ? "flex-wrap" : ""}`}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.5 }}
       >
         <Sparkles size={16} />
-        أهلاً بك في معرض أعمالي
-        <span className="flex items-center gap-1.5">
+        {tr("أهلاً بك في معرض أعمالي")}{" "}<span dir={textDirection} className="flex items-center gap-1.5">
           <span className="relative flex h-2 w-2">
             <span className="absolute h-full w-full animate-ping rounded-full bg-[#ff0000] opacity-90" />
             <span className="relative h-2 w-2 rounded-full bg-[#d00000]" />
           </span>
-          الموقع تحت التحسين 
-        </span>
+          {tr("الموقع تحت التحسين")}{" "}</span>
       </motion.p>
               
-      <motion.h1 
+      <motion.h1 dir={textDirection} 
         className={`${saudiFont.className} flex flex-wrap items-baseline gap-3 text-5xl font-black leading-[1.15] md:text-7xl`}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.6 }}
       >
-        <span className="text-white">فهد</span>
-        <span className="bg-gradient-to-l from-[#5b93e6] via-[#3f7d52] to-[#2454a4] bg-clip-text text-transparent">
-          الفهيد
-        </span>
+        <span dir={textDirection} className="text-white">{tr("فهد")}</span>
+        <span dir={textDirection} className="bg-gradient-to-l from-[#5b93e6] via-[#3f7d52] to-[#2454a4] bg-clip-text text-transparent">
+          {tr("الفهيد")}{" "}</span>
       </motion.h1>
       
-      <motion.p 
+      <motion.p dir={textDirection} 
         className="mt-6 max-w-xl text-lg leading-relaxed text-white/95"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.6 }}
       >
-        مهندس برمجيات ومحلل بيانات، حاصل على شهادة{" "}
-        <span className="font-semibold text-[#ffffff]">CAPM®</span>{" "}
-         أبني تطبيقات ويب حديثة وأصمم لوحات معلومات{" "}
-        <span className="font-semibold text-[#ffffff]">Power BI</span>{" "}
-        تحوّل البيانات إلى قرارات.
-      </motion.p>
+        {tr("مهندس برمجيات ومحلل بيانات، حاصل على شهادة")}{" "}
+        <span dir={textDirection} className="font-semibold text-[#ffffff]">CAPM®</span>{" "}
+         {tr("أبني تطبيقات ويب حديثة وأصمم لوحات معلومات")}{" "}
+        <span dir={textDirection} className="font-semibold text-[#ffffff]">Power BI</span>{" "}
+        {tr("تحوّل البيانات إلى قرارات.")}{" "}</motion.p>
 
       <motion.div 
         className="mt-9 flex flex-wrap items-center gap-4"
@@ -948,20 +1289,18 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.6 }}
       >
-        <a
+        <a dir={textDirection}
           href="#projects"
           className="rounded-full bg-[#2454a4] px-7 py-3 font-bold text-white shadow-lg shadow-[#2454a4]/30 transition hover:bg-[#3066c2]"
         >
-          استعرض مشاريعي
-        </a>
-        <a
+          {tr("استعرض مشاريعي")}{" "}</a>
+        <a dir={textDirection}
           href="/Fahad_AlFehaid_CV_Aug.pdf"
           download="Fahad-Alfehaid-CV.pdf"
           className="flex items-center gap-2 rounded-full border border-white/15 px-7 py-3 font-semibold text-white/85 transition hover:border-[#5b93e6]/50 hover:text-[#5b93e6]"
         >
           <Download size={18} />
-          تحميل السيرة الذاتية
-        </a>
+          {tr("تحميل السيرة الذاتية")}{" "}</a>
       </motion.div>
 
       <motion.div 
@@ -970,22 +1309,19 @@ export default function Home() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6, duration: 0.5 }}
       >
-             عزنا بطموحنا
-        <span className="h-1 w-1 rounded-full bg-white/30" />
-        <span className="flex items-center gap-1.5">
+             {tr("عزنا بطموحنا")}{" "}<span className="h-1 w-1 rounded-full bg-white/30" />
+        <span dir={textDirection} className="flex items-center gap-1.5">
    
         <MapPin size={15} className="text-[#ffffff]" />
-          الرياض، السعودية
-        </span>
+          {tr("الرياض، السعودية")}{" "}</span>
 
         <span className="h-1 w-1 rounded-full bg-white/30" />
-        <span className="flex items-center gap-1.5">
+        <span dir={textDirection} className="flex items-center gap-1.5">
           <span className="relative flex h-2 w-2">
             <span className="absolute h-full w-full animate-ping rounded-full bg-[#ffffff] opacity-70" />
             <span className="relative h-2 w-2 rounded-full bg-[#28c958]" />
           </span>
-          متاح للعمل
-        </span>
+          {tr("متاح للعمل")}{" "}</span>
       </motion.div>
       <motion.div
         className="absolute bottom-0 flex w-full flex-col items-center gap-3"
@@ -998,7 +1334,7 @@ export default function Home() {
         <div className="relative">
           {/* توهج خلف النص */}
           <div className="absolute inset-0 -z-10 scale-150 rounded-full bg-[#5b93e6]/20 blur-2xl" />
-          <p className="text-lg font-semibold tracking-widest text-white/90">
+          <p dir={textDirection} className="text-lg font-semibold tracking-widest text-white/90">
           
           </p>
         </div>
@@ -1036,9 +1372,8 @@ export default function Home() {
   whileHover={{ scale: 1.05 }}
 >
   {/* صورة الدلة */}
-  <Image src="/dallah_for_a_cup3.png" alt="الدلة" width={280} height={360} priority />
-  
-  {/* الخط: الآن إذا وضعته داخل الدلة، سيميل معها تلقائياً! */}
+  <Image src="/dallah_for_a_cup3.png" alt={tr("الدلة")} width={280} height={360} priority />
+  {/* خط القهوة */}
   <div className="absolute top-[15%] -left-2 h-[200px] w-[4px] origin-top" style={{ transform: "rotate(0deg)" }}> 
      {/* محتوى الخط (السائل) */}
   </div>
@@ -1076,7 +1411,7 @@ export default function Home() {
     >
       <Image
         src="/Cup3.png"
-        alt="فنجال القهوة"
+        alt={tr("فنجال القهوة")}
         width={140}
         height={150}
         className="drop-shadow-2xl"
@@ -1113,17 +1448,17 @@ export default function Home() {
           <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-6 py-12 sm:grid-cols-3">
             {STATS.map((s, i) => (
               <div key={i} className="text-center">
-                <p className={`${saudiFont.className} bg-gradient-to-l from-[#5b93e6] to-[#3f7d52] bg-clip-text text-4xl font-black text-transparent md:text-5xl`}>
-                  {s.value}
+                <p dir={textDirection} className={`${saudiFont.className} bg-gradient-to-l from-[#5b93e6] to-[#3f7d52] bg-clip-text text-4xl font-black text-transparent md:text-5xl`}>
+                  {tr(s.value)}
                 </p>
-                <p className="mt-2 text-sm text-white/55">{s.label}</p>
+                <p dir={textDirection} className="mt-2 text-sm text-white/55">{tr(s.label)}</p>
               </div>
             ))}
           </div>
         </section>
 
 {/* ===== About ===== */}
-<Section id="about" icon={User} title="نبذة عني" subtitle="من أنا وماذا أقدم">
+<Section id="about" icon={User} title={tr("نبذة عني")} subtitle={tr("من أنا وماذا أقدم")}>
   <div className="flex w-full min-w-0 flex-col items-center gap-8 overflow-hidden lg:flex-row lg:items-start lg:gap-12">
 
     {/* الصورة الشخصية */}
@@ -1161,7 +1496,7 @@ export default function Home() {
       >
         <Image
           src="/profile.png"
-          alt="فهد الفهيد"
+          alt={tr("فهد الفهيد")}
           fill
           className="object-contain"
           priority
@@ -1171,21 +1506,16 @@ export default function Home() {
 
     {/* النص */}
     <div className="min-w-0 flex-1">
-      <motion.p
+      <motion.p dir={textDirection}
         className="text-base leading-relaxed text-white/70 md:text-lg md:leading-loose"
         initial={{ opacity: 0, x: 30 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.6, delay: 0.4 }}
       >
-        مهندس برمجيات سعودي، خريج بكالوريوس هندسة برمجيات بتقدير ممتاز مع مرتبة الشرف الثانية وايضا حاصل على شهادة الدبلوم في تقنية شبكات الحاسب بتقدير ممتاز مع مرتبة الشرف الأولى. أجمع بين
-        التطوير البرمجي وتحليل البيانات وايضا تطوير الأعمال لتقديم حلول تقنية ذات أثر
-        حقيقي من بناء التطبيقات إلى تصميم لوحات المعلومات التنفيذية.
+        {tr("مهندس برمجيات سعودي، خريج بكالوريوس هندسة برمجيات بتقدير ممتاز مع مرتبة الشرف الثانية وايضا حاصل على شهادة الدبلوم في تقنية شبكات الحاسب بتقدير ممتاز مع مرتبة الشرف الأولى. أجمع بين التطوير البرمجي وتحليل البيانات وايضا تطوير الأعمال لتقديم حلول تقنية ذات أثر حقيقي من بناء التطبيقات إلى تصميم لوحات المعلومات التنفيذية.")}{" "}<br />
         <br />
-        <br />
-        حاصل على شهادة CAPM® المعتمدة من PMI، وأمتلك خبرة تدريبية في
-        إدارة المشاريع التقنية وإدارة حوكمة التكنولوجيا.
-      </motion.p>
+        {tr("حاصل على شهادة CAPM® المعتمدة من PMI، وأمتلك خبرة تدريبية في إدارة المشاريع التقنية وإدارة حوكمة التكنولوجيا.")}{" "}</motion.p>
     </div>
   </div>
 
@@ -1209,69 +1539,107 @@ export default function Home() {
         <span className={`mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br ${c.accent} text-white`}>
           <c.icon size={20} />
         </span>
-        <h3 className="font-bold text-white/90">{c.title}</h3>
-        <p className="mt-1 text-xs text-white/45">{c.skills.length} مهارات</p>
+        <h3 dir={textDirection} className="font-bold text-white/90">{tr(c.title)}</h3>
+        <p dir={textDirection} className="mt-1 text-xs text-white/45">{c.skills.length} {" "}{tr("مهارات")}</p>
       </motion.div>
     ))}
   </motion.div>
 </Section>
 
         {/* ===== Experience ===== */}
-<Section id="experience" icon={Briefcase} title="الخبرة والتعليم" subtitle="مسيرتي المهنية والأكاديمية">
-  <motion.div 
-    className="relative space-y-8 pr-8 before:absolute before:right-[7px] before:top-2 before:h-full before:w-px before:bg-gradient-to-b before:from-[#5b93e6] before:via-[#3f7d52] before:to-transparent"
+<Section
+  id="experience"
+  icon={Briefcase}
+  title={tr("الخبرة والتعليم")}
+  subtitle={tr("مسيرتي المهنية والأكاديمية")}
+>
+  <motion.div
+    dir={textDirection}
+    className="relative space-y-8 ps-8 before:absolute before:start-[7px] before:top-2 before:h-full before:w-px before:bg-gradient-to-b before:from-[#5b93e6] before:via-[#3f7d52] before:to-transparent"
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true, amount: 0.2 }}
     variants={{
       hidden: { opacity: 0 },
-      visible: { 
-        opacity: 1, 
-        transition: { staggerChildren: 0.9 } // ظهور كل عنصر تلو الآخر
-      }
+      visible: {
+        opacity: 1,
+        transition: { staggerChildren: 0.9 },
+      },
     }}
   >
     {EXPERIENCE.map((e, i) => (
-      <motion.div 
-        key={i} 
+      <motion.div
+        key={i}
         className="relative"
         variants={{
-          hidden: { opacity: 0, x: 30 }, // تبدأ من اليمين وتدخل
-          visible: { 
-            opacity: 1, 
-            x: 0, 
-            transition: { type: "spring", stiffness: 100, damping: 15 }
-          }
+          hidden: {
+            opacity: 0,
+            x: language === "ar" ? 30 : -30,
+          },
+          visible: {
+            opacity: 1,
+            x: 0,
+            transition: {
+              type: "spring",
+              stiffness: 100,
+              damping: 15,
+            },
+          },
         }}
       >
-        <span className="absolute -right-8 top-1.5 h-4 w-4 rounded-full border-2 border-[#5b93e6] bg-[#0a1f1c]" />
-        
+        {/* دائرة الخط الزمني */}
+        <span className="absolute -start-8 top-1.5 h-4 w-4 rounded-full border-2 border-[#5b93e6] bg-[#0a1f1c]" />
+
+        {/* بطاقة الخبرة */}
         <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-[#5b93e6]/25 hover:bg-white/[0.05]">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <h3 className="text-xl font-bold text-white">{e.role}</h3>
+            <div className="min-w-0">
+              <h3 className="text-xl font-bold text-white">
+                {tr(e.role)}
+              </h3>
+
               <p className="mt-1 flex items-center gap-2 text-sm text-white/50">
-                {e.role.includes("بكالوريوس") || e.role.includes("دبلوم") ? (
-                  <GraduationCap size={15} className="text-[#5b93e6]" />
+                {e.role.includes("بكالوريوس") ||
+                e.role.includes("دبلوم") ? (
+                  <GraduationCap
+                    size={15}
+                    className="shrink-0 text-[#5b93e6]"
+                  />
                 ) : (
-                  <Briefcase size={15} className="text-[#3f7d52]" />
+                  <Briefcase
+                    size={15}
+                    className="shrink-0 text-[#3f7d52]"
+                  />
                 )}
-                {e.org}
+
+                {tr(e.org)}
               </p>
             </div>
+
+            {/* الفترة */}
             <span
               className={`rounded-full px-4 py-1.5 text-xs font-bold ${
-                e.current ? "bg-[#2454a4]/20 text-[#5b93e6] ring-1 ring-[#2454a4]/40" : "bg-white/5 text-white/50"
+                e.current
+                  ? "bg-[#2454a4]/20 text-[#5b93e6] ring-1 ring-[#2454a4]/40"
+                  : "bg-white/5 text-white/50"
               }`}
             >
-              {e.period}
+              {tr(e.period)}
             </span>
           </div>
+
+          {/* المهام والإنجازات */}
           <ul className="mt-4 space-y-2">
             {e.points.map((p, j) => (
-              <li key={j} className="flex items-start gap-2 text-sm leading-relaxed text-white/65">
+              <li
+                key={j}
+                className="flex items-start gap-2 text-sm leading-relaxed text-white/65"
+              >
                 <span className="mt-2 h-1.5 w-1.5 shrink-0 rotate-45 bg-[#3f7d52]" />
-                {p}
+
+                <span className="min-w-0">
+                  {tr(p)}
+                </span>
               </li>
             ))}
           </ul>
@@ -1280,9 +1648,8 @@ export default function Home() {
     ))}
   </motion.div>
 </Section>
-
         {/* ===== Projects ===== */}
-        <Section id="projects" icon={FolderGit2} title="أبرز المشاريع" subtitle="أعمال أفتخر بها">
+        <Section id="projects" icon={FolderGit2} title={tr("أبرز المشاريع")} subtitle={tr("أعمال أفتخر بها")}>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {PROJECTS.map((p, i) => (
               <article
@@ -1296,7 +1663,7 @@ export default function Home() {
                                     {p.Image && (
                     <Image
                       src={p.Image}
-                      alt={p.title}
+                      alt={tr(p.title)}
                       fill
                       className="object-cover transition duration-300 group-hover:scale-105"
                     />
@@ -1311,8 +1678,8 @@ export default function Home() {
                   />
                 </div>
                 <div className="p-6">
-                  <h3 className="text-lg font-bold">{p.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/55">{p.description}</p>
+                  <h3 dir={textDirection} className="text-lg font-bold">{tr(p.title)}</h3>
+                  <p dir={textDirection} className="mt-2 text-sm leading-relaxed text-white/55">{tr(p.description)}</p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {p.tags.map((t) => (
                       <span key={t} className="rounded-md border border-[#3f7d52]/20 bg-[#3f7d52]/5 px-2.5 py-1 text-xs text-[#8fc79f]">
@@ -1327,7 +1694,7 @@ export default function Home() {
         </Section>
 
         {/* ===== Skills ===== */}
-        <Section id="skills" icon={Wrench} title="المهارات التقنية" subtitle="الأدوات التي أتقنها">
+        <Section id="skills" icon={Wrench} title={tr("المهارات التقنية")} subtitle={tr("الأدوات التي أتقنها")}>
           <div className="grid gap-6 md:grid-cols-2">
             {SKILL_CATEGORIES.map((c) => (
               <div key={c.title} className="rounded-2xl border border-white/8 bg-white/[0.03] p-7">
@@ -1335,15 +1702,15 @@ export default function Home() {
                   <span className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${c.accent} text-white`}>
                     <c.icon size={22} />
                   </span>
-                  <h3 className="text-lg font-bold">{c.title}</h3>
+                  <h3 dir={textDirection} className="text-lg font-bold">{tr(c.title)}</h3>
                 </div>
                 <div className="flex flex-wrap gap-2.5">
                   {c.skills.map((s) => (
-                    <span
+                    <span dir={textDirection}
                       key={s}
                       className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-sm text-white/75 transition hover:border-[#5b93e6]/40 hover:text-[#5b93e6]"
                     >
-                      {s}
+                      {tr(s)}
                     </span>
                   ))}
                 </div>
@@ -1353,32 +1720,29 @@ export default function Home() {
         </Section>
 
         {/* ===== Certificates ===== */}
-        <Section id="certificates" icon={Award} title="الشهادات" subtitle="إنجازات موثقة">
+        <Section id="certificates" icon={Award} title={tr("الشهادات")} subtitle={tr("إنجازات موثقة")}>
           <CertificatesCarousel items={CERTIFICATES} />
         </Section>
 
         {/* ===== recommendations ===== */}
-        <Section id="recommendations" icon={MessageSquare} title="شهادات التزكية المهنية" subtitle="ماذا قال مدرائي وزملائي عني">
+        <Section id="recommendations" icon={MessageSquare} title={tr("شهادات التزكية المهنية")} subtitle={tr("ماذا قال مدرائي وزملائي عني")}>
           <RecommendationsSection items={RECOMMENDATIONS} />
         </Section>
         {/* ===== Contact ===== */}
-             <Section id="contact" icon={MessageSquare} title="لنصنع شيئاً رائعاً" subtitle="تواصل معي">
+             <Section id="contact" icon={MessageSquare} title={tr("لنصنع شيئاً رائعاً")} subtitle={tr("تواصل معي")}>
           <div className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-l from-[#173a78]/40 to-[#0b1d15]">
             <div className="grid gap-8 p-8 md:p-12 lg:grid-cols-[1fr_auto]">
               <div>
-                <h3 className={`${saudiFont.className} text-2xl font-black md:text-3xl`}>
-                  عندك فكرة مشروع؟{" "}
-                  <span className="bg-gradient-to-l from-[#5b93e6] to-[#3f7d52] bg-clip-text text-transparent">
-                    خلينا نحولها لواقع
-                  </span>
+                <h3 dir={textDirection} className={`${saudiFont.className} text-2xl font-black md:text-3xl`}>
+                  {tr("عندك فكرة مشروع؟")}{" "}
+                  <span dir={textDirection} className="bg-gradient-to-l from-[#5b93e6] to-[#3f7d52] bg-clip-text text-transparent">
+                    {tr("خلينا نحولها لواقع")}{" "}</span>
                 </h3>
-                <p className="mt-4 max-w-lg leading-relaxed text-white/60">
-                  متاح للعمل الحر والفرص الوظيفية. راسلني على البريد أو تواصل
-                  معي مباشرة وسأرد عليك في أقرب وقت.
-                </p>
+                <p dir={textDirection} className="mt-4 max-w-lg leading-relaxed text-white/60">
+                  {tr("متاح للعمل الحر والفرص الوظيفية. راسلني على البريد أو تواصل معي مباشرة وسأرد عليك في أقرب وقت.")}{" "}</p>
 
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <a
+                  <a dir={textDirection}
                     href={LINKS.linkedin}
                     target="_blank"
                     rel="noreferrer"
@@ -1386,7 +1750,7 @@ export default function Home() {
                   >
                     <LinkedinIcon /> LinkedIn
                   </a>
-                  <a
+                  <a dir={textDirection}
                     href={LINKS.github}
                     target="_blank"
                     rel="noreferrer"
@@ -1403,7 +1767,7 @@ export default function Home() {
                 >
                   <Mail size={20} className="text-[#5b93e6]" />
                   <div>
-                    <p className="text-xs text-white/45">البريد الإلكتروني</p>
+                    <p dir={textDirection} className="text-xs text-white/45">{tr("البريد الإلكتروني")}</p>
                     <p className="text-sm font-semibold" dir="ltr">{LINKS.email}</p>
                   </div>
                 </a>
@@ -1414,15 +1778,15 @@ export default function Home() {
                 
                   <Phone size={20} className="text-[#5b93e6]" />
                   <div>
-                    <p className="text-xs text-white/45">الجوال</p>
+                    <p dir={textDirection} className="text-xs text-white/45">{tr("الجوال")}</p>
                     <p className="text-sm font-semibold" dir="ltr">{LINKS.phoneDisplay}</p>
                   </div>
                 </a>
                 <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-6 py-4">
                   <MapPin size={20} className="text-[#5b93e6]" />
                   <div>
-                    <p className="text-xs text-white/45">الموقع</p>
-                    <p className="text-sm font-semibold">الرياض، السعودية</p>
+                    <p dir={textDirection} className="text-xs text-white/45">{tr("الموقع")}</p>
+                    <p dir={textDirection} className="text-sm font-semibold">{tr("الرياض، السعودية")}</p>
                   </div>
                 </div>
               </div>
@@ -1448,7 +1812,7 @@ export default function Home() {
               {selectedProject.Image && (
                 <Image
                   src={selectedProject.Image}
-                  alt={selectedProject.title}
+                  alt={tr(selectedProject.title)}
                   fill
                   className="object-cover"
                 />
@@ -1456,7 +1820,7 @@ export default function Home() {
               <button
                 onClick={() => setSelectedProject(null)}
                 className="absolute left-4 top-4 flex h-10 w-10 items-center cursor-pointer justify-center rounded-full bg-black/50 text-white backdrop-blur transition-all hover:scale-110 hover:bg-[#d00000] hover:text-white"
-                aria-label="إغلاق"
+                aria-label={tr("إغلاق")}
               >
                 <X size={20} />
               </button>
@@ -1467,26 +1831,26 @@ export default function Home() {
 
             {/* المحتوى */}
             <div className="p-6 md:p-8">
-              <h3 className={`${saudiFont.className} text-2xl font-black md:text-3xl`}>
-                {selectedProject.title}
+              <h3 dir={textDirection} className={`${saudiFont.className} text-2xl font-black md:text-3xl`}>
+                {tr(selectedProject.title)}
               </h3>
 
-              <p className="mt-4 leading-relaxed text-white/70">
-                {selectedProject.details.overview}
+              <p dir={textDirection} className="mt-4 leading-relaxed text-white/70">
+                {tr(selectedProject.details.overview)}
               </p>
 
               <div className="mt-6">
-                <h4 className="mb-2 text-sm font-bold text-[#5b93e6]">دوري في المشروع</h4>
-                <p className="text-sm leading-relaxed text-white/65">{selectedProject.details.role}</p>
+                <h4 dir={textDirection} className="mb-2 text-sm font-bold text-[#5b93e6]">{tr("دوري في المشروع")}</h4>
+                <p dir={textDirection} className="text-sm leading-relaxed text-white/65">{tr(selectedProject.details.role)}</p>
               </div>
 
               <div className="mt-6">
-                <h4 className="mb-3 text-sm font-bold text-[#5b93e6]">أبرز الإنجازات</h4>
+                <h4 dir={textDirection} className="mb-3 text-sm font-bold text-[#5b93e6]">{tr("أبرز الإنجازات")}</h4>
                 <ul className="space-y-2">
                   {selectedProject.details.highlights.map((h, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm leading-relaxed text-white/70">
+                    <li dir={textDirection} key={idx} className="flex items-start gap-2 text-sm leading-relaxed text-white/70">
                       <span className="mt-2 h-1.5 w-1.5 shrink-0 rotate-45 bg-[#3f7d52]" />
-                      {h}
+                      {tr(h)}
                     </li>
                   ))}
                 </ul>
@@ -1518,10 +1882,9 @@ export default function Home() {
           }}
         />
         <div className="mx-auto mt-6 flex max-w-6xl flex-col items-center justify-between gap-4 px-6 text-sm text-white/45 md:flex-row">
-          <p>© 2026 فهد الفهيد — جميع الحقوق محفوظة</p>
-          <p className="flex items-center gap-2">
-            صُنع بشغف في
-            <span className="font-semibold text-[#5b93e6]">السعودية</span>
+          <p dir={textDirection}>{tr("© 2026 فهد الفهيد — جميع الحقوق محفوظة")}</p>
+          <p dir={textDirection} className="flex items-center gap-2">
+            {tr("صُنع بشغف في")}{" "}<span dir={textDirection} className="font-semibold text-[#5b93e6]">{tr("السعودية")}</span>
           </p>
         </div>
       </footer>
