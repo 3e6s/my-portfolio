@@ -1168,108 +1168,162 @@ function PortfolioPage({ onToggleLanguage }: { onToggleLanguage: () => void }) {
       </div>
 
       {/* ===== Navbar ===== */}
-        <header
-        className={`fixed top-0 z-50 w-full transition-all duration-500 ${
-          scrolled
-            ? "border-transparent bg-transparent backdrop-blur-0"
-            : "border-b border-white/5 bg-[#0a1f1c]/85 backdrop-blur-xl"
-        }`}
+<header
+  className={`fixed top-0 z-50 w-full transition-all duration-500 ${
+    scrolled
+      ? "border-transparent bg-transparent backdrop-blur-0"
+      : "border-b border-white/5 bg-[#0a1f1c]/85 backdrop-blur-xl"
+  }`}
+>
+  <nav
+    className={`mx-auto flex h-16 max-w-6xl items-center justify-between px-6 transition-opacity duration-500 ${
+      scrolled && !menuOpen ? "opacity-40" : "opacity-100"
+    }`}
+  >
+    {/* الشعار والاسم */}
+    <a href="#hero" className="flex items-center gap-4">
+      <Image
+        src="/brand-emblem.png"
+        alt={tr("فهد الفهيد")}
+        width={80}
+        height={70}
+        className="rounded-lg"
+      />
+
+      <span
+        dir={textDirection}
+        className={`${saudiFont.className} text-xl font-black tracking-wide`}
       >
-        <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-          <a href="#hero" className="flex items-center gap-4">
-            <Image src="/brand-emblem.png" alt={tr("فهد الفهيد")} width={80} height={70} className="rounded-lg" />
-            <span dir={textDirection} className={`${saudiFont.className} text-xl font-black tracking-wide`}>
-              <span dir={textDirection} className="text-[#e8cf9f]">{tr("فهد")}</span>
-              <span dir={textDirection} className="mr-2 bg-gradient-to-l from-[#d1af6f] to-[#7fb069] bg-clip-text text-transparent">
-                {tr("الفهيد")}{" "}</span>
+        <span className="text-[#e8cf9f]">
+          {tr("فهد")}
+        </span>{" "}
+        <span className="bg-gradient-to-l from-[#d1af6f] to-[#7fb069] bg-clip-text text-transparent">
+          {tr("الفهيد")}
+        </span>
+      </span>
+    </a>
+
+    {/* روابط الكمبيوتر */}
+    <ul className="hidden items-center gap-4 xl:flex">
+      {NAV.map((n, idx) => (
+        <li key={n.id} className="flex items-center gap-4">
+          {idx !== 0 && (
+            <span className="text-[#7fb069]" aria-hidden="true">
+              ◆
             </span>
+          )}
+
+          <a
+            dir={textDirection}
+            href={`#${n.id}`}
+            onClick={() => setActive(n.id)}
+            className={`text-sm transition-colors ${
+              active === n.id
+                ? "font-semibold text-[#f0d9a8]"
+                : "text-[#d1af6f]/80 hover:text-[#f0d9a8]"
+            }`}
+          >
+            {tr(n.label)}
           </a>
+        </li>
+      ))}
+    </ul>
 
-          <ul className="hidden items-center gap-4 xl:flex">
-            {NAV.map((n, idx) => (
-              <li key={n.id} className="flex items-center gap-4">
-                {idx !== 0 && (
-                  <span dir={textDirection} className="text-[#7fb069]" aria-hidden>
-                    ◆
-                  </span>
-                )}
-                <a dir={textDirection}
-                  href={`#${n.id}`}
-                  onClick={() => setActive(n.id)}
-                  className={`text-sm transition-colors ${
-                    active === n.id
-                      ? "font-semibold text-[#f0d9a8]"
-                      : "text-[#d1af6f]/80 hover:text-[#f0d9a8]"
-                  }`}
-                >
-                  {tr(n.label)}
-                </a>
-              </li>
-            ))}
-          </ul>
+    <a
+      dir={textDirection}
+      href="#contact"
+      className="hidden rounded-full border border-[#d1af6f]/40 bg-[#d1af6f]/10 px-5 py-2 text-sm font-bold text-[#f0d9a8] transition hover:bg-[#d1af6f]/20 xl:block"
+    >
+      {tr("تواصل معي")}
+    </a>
 
-          <a dir={textDirection}
-            href="#contact"
-            className="hidden rounded-full border border-[#d1af6f]/40 bg-[#d1af6f]/10 px-5 py-2 text-sm font-bold text-[#f0d9a8] transition hover:bg-[#d1af6f]/20 xl:block"
-          >
-            {tr("تواصل معي")}{" "}</a>
-            <button
-            type="button"
-            onClick={onToggleLanguage}
-            aria-label={
-              language === "ar"
-                ? "Switch to English"
-                : "التبديل إلى العربية"
-            }
-            className="hidden xl:inline-flex shrink-0 items-center justify-center rounded-lg border border-[#d1af6f]/40 bg-[#d1af6f]/10 px-3 py-2 text-sm font-semibold text-[#f0d9a8] transition hover:bg-[#d1af6f]/20 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d1af6f]"
-          >
-            <span
-              lang={language === "ar" ? "en" : "ar"}
-              dir={language === "ar" ? "ltr" : "rtl"}
-            >
-              {language === "ar" ? "English" : "العربية"}
-            </span>
-          </button>
+    {/* ترجمة الكمبيوتر */}
+    <button
+      type="button"
+      onClick={() => {
+        onToggleLanguage();
+        setMenuOpen(false);
+      }}
+      aria-label={
+        language === "ar"
+          ? "Switch to English"
+          : "التبديل إلى العربية"
+      }
+      className="hidden shrink-0 items-center justify-center rounded-lg border border-[#d1af6f]/40 bg-[#d1af6f]/10 px-3 py-2 text-sm font-semibold text-[#f0d9a8] transition hover:bg-[#d1af6f]/20 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d1af6f] xl:inline-flex"
+    >
+      <span
+        lang={language === "ar" ? "en" : "ar"}
+        dir={language === "ar" ? "ltr" : "rtl"}
+      >
+        {language === "ar" ? "English" : "العربية"}
+      </span>
+    </button>
 
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="rounded-lg p-2 text-[#d1af6f] hover:bg-white/5 xl:hidden"
-            aria-label={tr("القائمة")}
-          >
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
-        </nav>
+    {/* زر قائمة الجوال */}
+    <button
+      type="button"
+      onClick={() => setMenuOpen((open) => !open)}
+      className="rounded-lg p-2 text-[#d1af6f] hover:bg-white/5 xl:hidden"
+      aria-label={tr("القائمة")}
+      aria-expanded={menuOpen}
+      aria-controls="mobile-navigation"
+    >
+      {menuOpen ? <X size={22} /> : <Menu size={22} />}
+    </button>
+  </nav>
 
-        {menuOpen && (
-          <div className="border-t border-white/5 bg-[#0b1d15] px-6 py-4 xl:hidden">
-            {NAV.map((n) => (
-              <a dir={textDirection}
-                key={n.id}
-                href={`#${n.id}`}
-                onClick={() => setMenuOpen(false)}
-                className="block rounded-lg px-3 py-2.5 text-sm text-[#d1af6f] hover:bg-white/5 hover:text-[#f0d9a8]"
-              >
-                {tr(n.label)}
-              </a>
-            ))}
-          <button
-            type="button"
-            onClick={onToggleLanguage}
-            aria-label={language === "ar" ? "Switch to English" : "التبديل إلى العربية"}
+  {/* قائمة الجوال */}
+  {menuOpen && (
+    <div
+      id="mobile-navigation"
+      dir={textDirection}
+      className="border-t border-white/5 bg-[#0b1d15] px-6 py-4 text-start xl:hidden"
+    >
+      {NAV.map((n) => (
+        <a
+          key={n.id}
+          href={`#${n.id}`}
+          onClick={() => {
+            setActive(n.id);
+            setMenuOpen(false);
+          }}
+          className="block rounded-lg px-3 py-2.5 text-start text-sm text-[#d1af6f] hover:bg-white/5 hover:text-[#f0d9a8]"
+        >
+          {tr(n.label)}
+        </a>
+      ))}
+
+      {/* يتبع مكان الزر اتجاه لغة القائمة */}
+      <div className="mt-3 flex justify-start px-3">
+        <button
+          type="button"
+          onClick={() => {
+            onToggleLanguage();
+            setMenuOpen(false);
+          }}
+          aria-label={
+            language === "ar"
+              ? "Switch to English"
+              : "التبديل إلى العربية"
+          }
+          className="inline-flex shrink-0 items-center justify-center rounded-lg border border-[#d1af6f]/40 bg-[#d1af6f]/10 px-3 py-2 text-sm font-semibold text-[#f0d9a8] transition hover:bg-[#d1af6f]/20 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d1af6f]"
+        >
+          <span
             lang={language === "ar" ? "en" : "ar"}
             dir={language === "ar" ? "ltr" : "rtl"}
-            className="shrink-0 rounded-lg border border-[#d1af6f]/40 bg-[#d1af6f]/10 px-3 py-2 text-sm font-semibold text-[#f0d9a8] transition hover:bg-[#d1af6f]/20 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d1af6f]"
           >
             {language === "ar" ? "English" : "العربية"}
-          </button>
-          </div>
-        )}
-      </header>
+          </span>
+        </button>
+      </div>
+    </div>
+  )}
+</header>
 
       <main className="relative">
         {/* ===== Hero ===== */}
         <section id="hero" dir={textDirection} className="relative flex min-h-screen items-center pt-16 overflow-hidden" >
-  <div
+      <div
   className="hidden lg:block"
   style={{transform: language === "en" ? "scaleX(-1)" : "none", }}> 
   </div>
@@ -1511,18 +1565,27 @@ function PortfolioPage({ onToggleLanguage }: { onToggleLanguage: () => void }) {
 </section>
 
         {/* ===== Stats ===== */}
-        <section className="border-y border-white/5 bg-[#0b1d15]/60">
-          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-6 py-12 sm:grid-cols-3">
-            {STATS.map((s, i) => (
-              <div key={i} className="text-center">
-                <p dir={textDirection} className={`${saudiFont.className} bg-gradient-to-l from-[#5b93e6] to-[#3f7d52] bg-clip-text text-4xl font-black text-transparent md:text-5xl`}>
-                  {tr(s.value)}
-                </p>
-                <p dir={textDirection} className="mt-2 text-sm text-white/55">{tr(s.label)}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+          <section
+            dir={textDirection}
+            className="border-y border-white/5 bg-[#0b1d15]/60"
+          >
+            <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-6 py-10 sm:grid-cols-3">
+              {STATS.map((s, i) => (
+                <div key={i} className="min-w-0 text-center">
+                  <p
+                    dir="ltr"
+                    className="bg-gradient-to-l from-[#5b93e6] to-[#3f7d52] bg-clip-text text-2xl font-bold leading-tight text-transparent md:text-3xl"
+                  >
+                    {s.value === "1Year" ? "1 Year" : s.value}
+                  </p>
+
+                  <p className="mx-auto mt-2 max-w-[240px] text-xs leading-relaxed text-white/55 md:text-sm">
+                    {tr(s.label)}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
 
 {/* ===== About ===== */}
 <Section id="about" icon={User} title={tr("نبذة عني")} subtitle={tr("من أنا وماذا أقدم")}>
