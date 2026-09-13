@@ -1834,30 +1834,48 @@ function PortfolioPage({ onToggleLanguage }: { onToggleLanguage: () => void }) {
         </Section>
 
         {/* ===== Skills ===== */}
-        <Section id="skills" icon={Wrench} title={tr("المهارات التقنية")} subtitle={tr("الأدوات التي أتقنها")}>
-          <div className="grid gap-6 md:grid-cols-2">
-            {SKILL_CATEGORIES.map((c) => (
-              <div key={c.title} className="rounded-2xl border border-white/8 bg-white/[0.03] p-7">
-                <div className="mb-5 flex items-center gap-3">
-                  <span className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${c.accent} text-white`}>
-                    <c.icon size={22} />
-                  </span>
-                  <h3 dir={textDirection} className="text-lg font-bold">{tr(c.title)}</h3>
-                </div>
-                <div className="flex flex-wrap gap-2.5">
-                  {c.skills.map((s) => (
-                    <span dir={textDirection}
-                      key={s}
-                      className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-sm text-white/75 transition hover:border-[#5b93e6]/40 hover:text-[#5b93e6]"
-                    >
-                      {tr(s)}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </Section>
+<Section
+  id="skills"
+  icon={Wrench}
+  title={tr("المهارات التقنية")}
+  subtitle={tr("الأدوات التي أتقنها")}
+>
+  <div
+    dir={textDirection}
+    className="grid gap-6 text-start md:grid-cols-2"
+  >
+    {SKILL_CATEGORIES.map((c) => (
+      <div
+        key={c.title}
+        className="min-w-0 rounded-2xl border border-white/8 bg-white/[0.03] p-7"
+      >
+        <div className="mb-5 flex items-center gap-3">
+          <span
+            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${c.accent} text-white`}
+          >
+            <c.icon size={22} />
+          </span>
+
+          <h3 className="text-lg font-bold">
+            {tr(c.title)}
+          </h3>
+        </div>
+
+        <div className="flex flex-wrap justify-start gap-2.5">
+          {c.skills.map((s) => (
+            <span
+              key={s}
+              dir="auto"
+              className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-sm text-white/75 transition hover:border-[#5b93e6]/40 hover:text-[#5b93e6]"
+            >
+              {tr(s)}
+            </span>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</Section>
 
         {/* ===== Certificates ===== */}
         <Section id="certificates" icon={Award} title={tr("الشهادات")} subtitle={tr("إنجازات موثقة")}>
