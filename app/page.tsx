@@ -22,6 +22,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Eye,
+  Repeat,
 } from "lucide-react";
 
 
@@ -268,7 +269,7 @@ const SKILL_CATEGORIES = [
   },
   {
     title: "أجايل",
-    icon: MessageSquare,
+    icon: Repeat,
     accent: "from-[#3f7d52] to-[#173a78]",
     skills: ["Scrum Master", "Azure DevOps", "Sprint Planning"],
   },
@@ -1574,11 +1575,29 @@ function PortfolioPage({ onToggleLanguage }: { onToggleLanguage: () => void }) {
                 <div key={i} className="min-w-0 text-center">
                   <p
                     dir="ltr"
-                    className="bg-gradient-to-l from-[#5b93e6] to-[#3f7d52] bg-clip-text text-2xl font-bold leading-tight text-transparent md:text-3xl"
+                    style={{ fontFamily: "Arial, Helvetica, sans-serif" }}
+                    className="text-2xl font-bold leading-tight md:text-3xl"
                   >
-                    {s.value === "1Year" ? "1 Year" : s.value}
-                  </p>
+                    <span
+                      style={{ fontFamily: "inherit" }}
+                      className="bg-gradient-to-l from-[#5b93e6] to-[#3f7d52] bg-clip-text text-transparent"
+                    >
+                      {s.value === "CAPM®"
+                        ? "CAPM"
+                        : s.value === "1Year"
+                          ? "1 Year"
+                          : s.value}
+                    </span>
 
+                    {s.value === "CAPM®" && (
+                      <sup
+                        style={{ fontFamily: "inherit" }}
+                        className="ms-0.5 text-[11px] leading-none text-[#5b93e6] md:text-[12px]"
+                      >
+                        ®
+                      </sup>
+                    )}
+                  </p>
                   <p className="mx-auto mt-2 max-w-[240px] text-xs leading-relaxed text-white/55 md:text-sm">
                     {tr(s.label)}
                   </p>
@@ -1649,31 +1668,43 @@ function PortfolioPage({ onToggleLanguage }: { onToggleLanguage: () => void }) {
     </div>
   </div>
 
-  {/* بطاقات المهارات */}
-  <motion.div
-    className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4"
-    initial={{ opacity: 0, y: 40 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.2 }}
-    transition={{ duration: 0.6, delay: 0.5 }}
-  >
-    {SKILL_CATEGORIES.map((c, index) => (
-      <motion.div
-        key={c.title}
-        className="group rounded-xl border border-white/8 bg-white/[0.03] p-5 transition hover:border-[#5b93e6]/30 hover:bg-white/[0.05]"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.4, delay: index * 0.1 + 0.5 }}
+{/* بطاقات المهارات */}
+<motion.div
+  dir={textDirection}
+  className="mt-12 grid grid-cols-2 gap-4 text-start md:grid-cols-4"
+  initial={{ opacity: 0, y: 40 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true, amount: 0.2 }}
+  transition={{ duration: 0.6, delay: 0.5 }}
+>
+  {SKILL_CATEGORIES.map((c, index) => (
+    <motion.div
+      key={c.title}
+      className="group min-w-0 rounded-xl border border-white/8 bg-white/[0.03] p-5 text-start transition hover:border-[#5b93e6]/30 hover:bg-white/[0.05]"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{
+        duration: 0.4,
+        delay: index * 0.1 + 0.5,
+      }}
+    >
+      <span
+        className={`mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br ${c.accent} text-white`}
       >
-        <span className={`mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br ${c.accent} text-white`}>
-          <c.icon size={20} />
-        </span>
-        <h3 dir={textDirection} className="font-bold text-white/90">{tr(c.title)}</h3>
-        <p dir={textDirection} className="mt-1 text-xs text-white/45">{c.skills.length} {" "}{tr("مهارات")}</p>
-      </motion.div>
-    ))}
-  </motion.div>
+        <c.icon size={20} />
+      </span>
+
+      <h3 className="font-bold text-white/90">
+        {tr(c.title)}
+      </h3>
+
+      <p className="mt-1 text-xs text-white/45">
+        {c.skills.length} {tr("مهارات")}
+      </p>
+    </motion.div>
+  ))}
+</motion.div>
 </Section>
 
         {/* ===== Experience ===== */}
