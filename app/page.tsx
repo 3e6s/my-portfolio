@@ -1249,7 +1249,7 @@ function PortfolioPage({ onToggleLanguage }: { onToggleLanguage: () => void }) {
           ? "Switch to English"
           : "التبديل إلى العربية"
       }
-      className="hidden shrink-0 items-center justify-center rounded-lg border border-[#d1af6f]/40 bg-[#d1af6f]/10 px-3 py-2 text-sm font-semibold text-[#f0d9a8] transition hover:bg-[#d1af6f]/20 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d1af6f] xl:inline-flex"
+      className="hidden shrink-0 items-center justify-center rounded-lg border border-[#d1af6f]/40 bg-[#d1af6f]/10 px-3 py-2 text-sm font-semibold text-[#f0d9a8] transition hover:bg-[#d1af6f]/20 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d1af6f] xl:inline-flex cursor-pointer"
     >
       <span
         lang={language === "ar" ? "en" : "ar"}
@@ -1263,7 +1263,7 @@ function PortfolioPage({ onToggleLanguage }: { onToggleLanguage: () => void }) {
     <button
       type="button"
       onClick={() => setMenuOpen((open) => !open)}
-      className="rounded-lg p-2 text-[#d1af6f] hover:bg-white/5 xl:hidden"
+      className="rounded-lg p-2 text-[#d1af6f] hover:bg-white/5 xl:hidden "
       aria-label={tr("القائمة")}
       aria-expanded={menuOpen}
       aria-controls="mobile-navigation"
