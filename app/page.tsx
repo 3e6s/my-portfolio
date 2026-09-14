@@ -23,6 +23,7 @@ import {
   ChevronRight,
   Eye,
   Repeat,
+  Gamepad2,
 } from "lucide-react";
 
 
@@ -192,7 +193,7 @@ const ENGLISH_TRANSLATIONS: Record<string, string> = {
   "تحوّل البيانات إلى قرارات.": "to turn data into decisions.",
   "استعرض مشاريعي": "Explore My Projects",
   "تحميل السيرة الذاتية": "Download CV",
-  "عزنا بطموحنا": "AZNNA by our ambition",
+  "عزنا بطموحنا": "Our pride lies in our ambition",
   "الرياض، السعودية": "Riyadh, Saudi Arabia",
   "متاح للعمل": "Open to work",
   "مهندس برمجيات سعودي، خريج بكالوريوس هندسة برمجيات بتقدير ممتاز مع مرتبة الشرف الثانية وايضا حاصل على شهادة الدبلوم في تقنية شبكات الحاسب بتقدير ممتاز مع مرتبة الشرف الأولى. أجمع بين التطوير البرمجي وتحليل البيانات وايضا تطوير الأعمال لتقديم حلول تقنية ذات أثر حقيقي من بناء التطبيقات إلى تصميم لوحات المعلومات التنفيذية.": "A Saudi software engineer with a bachelor’s degree in Software Engineering, graded Excellent with Second-Class Honors, and a diploma in Computer Network Technology, graded Excellent with First-Class Honors. I combine software development, data analysis, and business development to deliver impactful technology solutions, from building applications to designing executive dashboards.",
@@ -1411,11 +1412,24 @@ function PortfolioPage({ onToggleLanguage }: { onToggleLanguage: () => void }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.6 }}
       >
-        <a dir={textDirection}
-          href="#projects"
-          className="rounded-full bg-[#2454a4] px-7 py-3 font-bold text-white shadow-lg shadow-[#2454a4]/30 transition hover:bg-[#3066c2]"
+        <a
+          dir={textDirection}
+          href="/national-day"
+          className="inline-flex items-center justify-center gap-2.5 rounded-full border border-[#d1af6f]/25 bg-gradient-to-l from-[#2454a4] to-[#3f7d52] px-7 py-3 font-bold text-white shadow-lg shadow-[#173a78]/30 transition duration-300 hover:-translate-y-0.5 hover:border-[#d1af6f]/45 hover:from-[#3066c2] hover:to-[#4b9161]"
         >
-          {tr("استعرض مشاريعي")}{" "}</a>
+          <Gamepad2
+            size={20}
+            strokeWidth={1.8}
+            className="text-[#f0d9a8]"
+            aria-hidden="true"
+          />
+
+          <span>
+            {language === "ar"
+              ? "تحدّي اليوم الوطني"
+              : "National Day Challenge"}
+          </span>
+        </a>
         <a dir={textDirection}
           href="/Fahad_AlFehaid_CV_Aug.pdf"
           download="Fahad-Alfehaid-CV.pdf"
