@@ -67,25 +67,24 @@ const ENGLISH_TRANSLATIONS: Record<string, string> = {
   "إدارة المشاريع": "Project Management",
   "إدارة المخاطر": "Risk Management",
   "أجايل": "Agile",
-  "متدرب — المشاريع الرقمية / البنية المؤسسية": "Trainee — Digital Projects / Enterprise Architecture",
-  "الهيئة السعودية للتخصصات الصحية · الرياض": "Saudi Commission for Health Specialties · Riyadh",
+  "البنية المؤسسية / المشاريع الرقمية – متدرب": "Enterprise Architecture / Digital Projects – Trainee",  "الهيئة السعودية للتخصصات الصحية · الرياض": "Saudi Commission for Health Specialties · Riyadh",
   "نوفمبر 2025 — مايو 2026": "November 2025 — May 2026",
   "ادارة 3 مشاريع تحوّل رقمي استراتيجية ومواءمة الفرق التقنية والمورّدين": "Managed 3 strategic digital transformation projects and coordinated technical teams and vendors",
   "المساهمة في إنهاء عقد تقني قائم لصالح حل داخلي وتوفير الموارد المالية": "Contributed to ending an existing technology contract in favor of an in-house solution, saving financial resources",
   "رفع تقارير أسبوعية للمدير التنفيذي للتقنية وإدارة قصص المستخدم في Azure DevOps": "Prepared weekly reports for the Chief Technology Officer and managed user stories in Azure DevOps",
-  "اكاديمية الذكاء الاصطناعي / متدرب تعاوني — الحوكمة التقنية": "AI Academy / Cooperative Trainee — Technology Governance",
+  "اكاديمية الذكاء الاصطناعي / الحوكمة التقنية – متدرب تعاوني": "AI Academy / Technology Governance – Cooperative Trainee",
   "شركة تحكم · الرياض": "Tahakom · Riyadh",
   "يونيو 2025 — نوفمبر 2025": "June 2025 — November 2025",
   "تصميم وتسليم حلّي Power BI متكاملين ودمجهما في بوابة BI موحّدة": "Designed and delivered two integrated Power BI solutions and combined them in a unified BI portal",
   "بناء خط تحليل يغطي أكثر من 70,000 صف عبر 12 شهر": "Built an analytics pipeline covering more than 70,000 rows across 12 months",
   "تمثيل الشركة في 8 اجتماعات فنية وتحليل +1,250 ردّ على كراسات الشروط": "Represented the company in 8 technical meetings and analyzed more than 1,250 RFP responses",
   "بكالوريوس هندسة برمجيات": "Bachelor of Science in Software Engineering",
-  "جامعة المستقبل — مرتبة الشرف": "Mustaqbal University — Honors",
+  "جامعة المستقبل — التقدير: ممتاز مع مرتبة الشرف الثانية": "Mustaqbal University — Grade: Excellent with Second-Class Honors",
   "تخرج 2025": "Graduated 2025",
   "معدل تراكمي 4.55/5": "GPA: 4.55/5",
   "المركز الأول في اختبار جاهزية هندسة البرمجيات (NCAAA) على مستوى كلية الهندسة وعلوم الحاسب": "Ranked first in the Software Engineering Readiness Exam (NCAAA) at the College of Engineering and Computer Science",
   "دبلوم تقنية شبكات حاسب الي": "Diploma in Computer Network Technology",
-  "الكلية التقنية في بريدة — مرتبة الشرف الأولى": "Technical College in Buraydah — First-Class Honors",
+  "الكلية التقنية في بريدة — التقدير: ممتاز مع مرتبة الشرف الأولى": "Technical College in Buraydah — Grade: Excellent with First-Class Honors",
   "تخرج 2022": "Graduated 2022",
   "معدل تراكمي 4.89/5": "GPA: 4.89/5",
   "المركز الثاني على مستوى كلية الحاسب في بريدة": "Ranked second at the College of Computing in Buraydah",
@@ -148,6 +147,8 @@ const ENGLISH_TRANSLATIONS: Record<string, string> = {
   "تصميم وتطوير التطبيق باستخدام تقنيات الويب الحديثة.": "Designed and developed the application using modern web technologies.",
   "تطوير نظام إدارة المهام فعال": "Developed an effective task management system",
   "دمج جميع الميزات المطلوبة في تطبيق واحد": "Integrated all required features into one application",
+  "تم ترشيحي من قِبل أكاديمية طويق ضمن نخبة من المتقدمين، استنادًا إلى خبراتي السابقة، وإتمامي عددًا من معسكرات الأكاديمية، وتميزي خلال مراحل المقابلات والتصفية النهائية.":
+  "Selected by Tuwaiq Academy from a competitive pool of candidates, based on my prior experience, completion of several Tuwaiq Academy bootcamps, and strong performance throughout the interview and final selection stages.",
   "ارسال رسائل تنبيهية للبريد الاكتروني": "Implemented email notifications",
   "شهادة الهيئة السعودية للتخصصات الصحية اتمام التدريب": "SCFHS Training Completion Certificate",
   "شهادة اتمام التدريب التعاوني": "Cooperative Training Completion Certificate",
@@ -278,18 +279,19 @@ const SKILL_CATEGORIES = [
 
 const EXPERIENCE = [
   {
-    role: "متدرب — المشاريع الرقمية / البنية المؤسسية",
+    role: "البنية المؤسسية / المشاريع الرقمية – متدرب",
     org: "الهيئة السعودية للتخصصات الصحية · الرياض",
     period: "نوفمبر 2025 — مايو 2026",
-    current: true,
+    current: false,
     points: [
       "ادارة 3 مشاريع تحوّل رقمي استراتيجية ومواءمة الفرق التقنية والمورّدين",
       "المساهمة في إنهاء عقد تقني قائم لصالح حل داخلي وتوفير الموارد المالية",
       "رفع تقارير أسبوعية للمدير التنفيذي للتقنية وإدارة قصص المستخدم في Azure DevOps",
+      "تم ترشيحي من قِبل أكاديمية طويق ضمن نخبة من المتقدمين، استنادًا إلى خبراتي السابقة، وإتمامي عددًا من معسكرات الأكاديمية، وتميزي خلال مراحل المقابلات والتصفية النهائية.",
     ],
   },
   {
-    role: "اكاديمية الذكاء الاصطناعي / متدرب تعاوني — الحوكمة التقنية",
+    role: "اكاديمية الذكاء الاصطناعي / الحوكمة التقنية – متدرب تعاوني",
     org: "شركة تحكم · الرياض",
     period: "يونيو 2025 — نوفمبر 2025",
     current: false,
@@ -301,7 +303,7 @@ const EXPERIENCE = [
   },
   {
     role: "بكالوريوس هندسة برمجيات",
-    org: "جامعة المستقبل — مرتبة الشرف",
+    org: "جامعة المستقبل — التقدير: ممتاز مع مرتبة الشرف الثانية",
     period: "تخرج 2025",
     current: false,
     points: [
@@ -311,7 +313,7 @@ const EXPERIENCE = [
   },
   {
     role: "دبلوم تقنية شبكات حاسب الي",
-    org: "الكلية التقنية في بريدة — مرتبة الشرف الأولى",
+    org: "الكلية التقنية في بريدة — التقدير: ممتاز مع مرتبة الشرف الأولى",
     period: "تخرج 2022",
     current: false,
     points: [
@@ -1415,19 +1417,28 @@ function PortfolioPage({ onToggleLanguage }: { onToggleLanguage: () => void }) {
         <a
           dir={textDirection}
           href="/national-day"
-          className="inline-flex items-center justify-center gap-2.5 rounded-full border border-[#d1af6f]/25 bg-gradient-to-l from-[#2454a4] to-[#3f7d52] px-7 py-3 font-bold text-white shadow-lg shadow-[#173a78]/30 transition duration-300 hover:-translate-y-0.5 hover:border-[#d1af6f]/45 hover:from-[#3066c2] hover:to-[#4b9161]"
+          className="group relative isolate inline-flex overflow-hidden rounded-full p-[2px] shadow-lg shadow-[#173a78]/30 transition duration-300 hover:-translate-y-0.5 hover:shadow-[#5b93e6]/25"
         >
-          <Gamepad2
-            size={20}
-            strokeWidth={1.8}
-            className="text-[#f0d9a8]"
+          {/* خط النيون المتحرك */}
+          <span
             aria-hidden="true"
+            className="absolute inset-[-150%] z-0 animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0deg,transparent_245deg,#5b93e6_280deg,#f0d9a8_315deg,#7fb069_350deg,transparent_360deg)]"
           />
 
-          <span>
-            {language === "ar"
-              ? "تحدّي اليوم الوطني"
-              : "National Day Challenge"}
+          {/* محتوى الزر */}
+          <span className="relative z-10 inline-flex items-center justify-center gap-2.5 rounded-full bg-gradient-to-l from-[#2454a4] to-[#3f7d52] px-7 py-3 font-bold text-white transition duration-300 group-hover:from-[#3066c2] group-hover:to-[#4b9161]">
+            <Gamepad2
+              size={20}
+              strokeWidth={1.8}
+              className="text-[#f0d9a8]"
+              aria-hidden="true"
+            />
+
+            <span>
+              {language === "ar"
+                ? "تحدّي اليوم الوطني"
+                : "National Day Challenge"}
+            </span>
           </span>
         </a>
         <a dir={textDirection}

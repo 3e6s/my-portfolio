@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight, Award, Check, ChevronDown, Clock3, Flag, RotateC
 import { ibmPlexArabic, saudiFont } from "../fonts";
 import { gameReducer, INITIAL_STATE, newQuestions, POINTS_PER_ANSWER, QUESTIONS, type Language } from "./quiz";
 import "./national-day.css";
+import { Gamepad2 } from "lucide-react";
 type LeaderboardEntry = {
   playerName: string;
   score: number;
@@ -234,7 +235,7 @@ useEffect(() => {
                   }
                 >
                   <span className="nd-heading-line">
-                    {t("قدّها؟", "Up for a challenge?")}
+                    {t("جاهز للتحدي؟", "Up for a challenge?")}
                   </span>
 
                   <span className="nd-heading-line nd-gradient">
@@ -258,16 +259,40 @@ useEffect(() => {
               <p className="nd-muted">{t("اسمك بيظهر في النتيجة النهائية.", "Your name will appear on your final result.")}</p>
               <form onSubmit={event => { event.preventDefault(); start(); }}>
                 <label htmlFor="player-name">{t("اسمك أو لقبك", "Your name or nickname")}</label>
-                <input id="player-name" autoComplete="nickname" dir="auto" maxLength={40} required value={name} onChange={e => { setName(e.target.value); setNameError(false); }} placeholder={t("مثال: فهد", "e.g. Fahad")} aria-invalid={nameError} aria-describedby={nameError ? "name-error" : undefined} />
+                <input id="player-name"   dir={direction} className={`nd-input ${ language === "ar" ? "text-right" : "text-left" }`} autoComplete="nickname" maxLength={40} required value={name} onChange={e => { setName(e.target.value); setNameError(false); }} placeholder={t("مثال: فهد", "e.g. Fahad")} aria-invalid={nameError} aria-describedby={nameError ? "name-error" : undefined} />
                 {nameError && <p id="name-error" role="alert" className="nd-error">{t("اكتب اسمك أولًا عشان نبدأ.", "Enter your name to get started.")}</p>}
                 <label htmlFor="question-time">{t("الوقت لكل سؤال", "Time per question")}</label>
                 <div className="nd-select"><select id="question-time" value={seconds} onChange={e => setSeconds(Number(e.target.value))}>
                   <option value={20}>{t("20 ثانية — التحدّي المعتاد", "20 seconds — standard challenge")}</option>
                   <option value={40}>{t("40 ثانية — خذ راحتك", "40 seconds — take your time")}</option>
-                  <option value={0}>{t("بدون مؤقت — تعلّم على مهلك", "No timer — learn at your own pace")}</option>
+                  <option value={0}>{t("بدون مؤقت — استكشف", "No timer — explore")}</option>
                 </select><ChevronDown size={16} aria-hidden="true" /></div>
                 <p className="nd-rules">{t("10 نقاط لكل إجابة صحيحة. عند انتهاء الوقت يُحسب السؤال بلا نقاط، وتظهر لك الإجابة الصحيحة.", "Earn 10 points for every correct answer. If time runs out, the question earns no points and the correct answer is revealed.")}</p>
-                <button className="nd-primary" type="submit">{t("ابدأ التحدّي", "Start the challenge")}<HeadingArrow size={18} /></button>
+                    <button
+  dir={direction}
+  type="submit"
+  className="group relative isolate inline-flex w-full overflow-hidden rounded-full bg-white/10 p-[2px] shadow-lg shadow-[#173a78]/30 transition duration-300 hover:-translate-y-0.5 hover:shadow-[#5b93e6]/25"
+>
+  {/* إطار النيون المتحرك */}
+  <span
+    aria-hidden="true"
+    className="absolute inset-[-150%] z-0 animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_0deg,#5b93e6,#f0d9a8,#7fb069,#5b93e6)] [backface-visibility:hidden] [will-change:transform] motion-reduce:animate-none"
+  />
+
+  {/* محتوى الزر */}
+  <span className="relative z-10 inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-gradient-to-l from-[#2454a4] to-[#3f7d52] px-7 py-3 font-bold text-white transition duration-300 group-hover:from-[#3066c2] group-hover:to-[#4b9161]">
+    <Gamepad2
+      size={20}
+      strokeWidth={1.8}
+      className="shrink-0 text-[#f0d9a8]"
+      aria-hidden="true"
+    />
+
+    <span>
+      {t("ابدأ التحدّي", "Start the challenge")}
+    </span>
+  </span>
+</button>
               </form>
             </section>
           </div>
@@ -457,7 +482,47 @@ useEffect(() => {
   </section>
 )}
       </main>
-      <footer className="nd-footer"><span>{t("صُنع بشغف في السعودية", "Made with passion in Saudi Arabia")}</span><span>© 2026 {t("فهد الفهيد", "Fahad Alfehaid")}</span></footer>
+<footer className="relative border-t border-white/5 pt-6 pb-8">
+  <div
+    className="h-10 w-full opacity-80"
+    style={{
+      backgroundImage: "url('/footer-logo.png')",
+      backgroundRepeat: "repeat-x",
+      backgroundSize: "auto 100%",
+      backgroundPosition: "center",
+    }}
+  />
+
+  <div className="mx-auto mt-6 flex max-w-6xl flex-col items-center justify-between gap-4 px-6 text-sm text-white/45 md:flex-row">
+    <p dir={direction}>
+      {t(
+        "© 2026 فهد الفهيد — جميع الحقوق محفوظة",
+        "© 2026 Fahad Alfehaid — All rights reserved"
+      )}
+    </p>
+
+    <p
+      dir={direction}
+      className="flex items-center gap-2"
+    >
+      {t(
+        "صُنع بشغف في",
+        "Made with passion in"
+      )}{" "}
+
+      <span className="font-semibold text-[#5b93e6]">
+        {t("السعودية", "Saudi Arabia")}
+      </span>
+    </p>
+  </div>
+</footer>
+      {/* ===== خط زخرفي جانبي ثابت ===== */}
+      <div className="pointer-events-none fixed inset-y-0 left-0 z-40 hidden w-10 opacity-70 lg:block">
+        <Image src="/side-line2.png" alt="" fill className="object-cover object-top" />
+      </div>
+      <div className="pointer-events-none fixed inset-y-0 right-0 z-40 hidden w-10 opacity-70 lg:block">
+        <Image src="/side-line2.png" alt="" fill className="object-cover object-top" />
+      </div>
     </div>
   );
 }
