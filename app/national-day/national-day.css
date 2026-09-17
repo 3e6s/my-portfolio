@@ -148,3 +148,212 @@
     line-height: 1.85;
   }
 }
+
+/* خط المؤقت — خارج media لكي يظهر على جميع الشاشات */
+/* مسار المؤقت */
+.nd-neon-timer {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  margin-block: 10px 32px;
+  overflow: visible;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+/* خط النيون — إضاءة أخف */
+.nd-neon-beam {
+  position: absolute;
+  inset-block: 1px;
+  inset-inline-start: 0;
+  width: 100%;
+  border-radius: 999px;
+  color: #7fb069;
+  background: currentColor;
+  box-shadow:
+    0 0 3px currentColor,
+    0 0 7px currentColor;
+
+  animation-name: nd-neon-countdown;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+
+  will-change: width, color;
+}
+
+/* الكرة — واضحة ولكن بإضاءة أخف */
+.nd-neon-head {
+  position: absolute;
+  z-index: 4;
+  inset-inline-end: -8px;
+  top: 50%;
+  width: 17px;
+  height: 17px;
+  transform: translateY(-50%);
+  border: 3px solid currentColor;
+  border-radius: 50%;
+  background: #f8fff9;
+  box-shadow:
+    0 0 4px currentColor,
+    0 0 9px currentColor;
+}
+
+/* شكل الشرارة */
+.nd-neon-spark {
+  position: absolute;
+  z-index: 5;
+  inset-inline-end: -4px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow:
+    0 0 3px #ffffff,
+    0 0 7px currentColor;
+
+  pointer-events: none;
+  will-change:
+    transform,
+    opacity,
+    inset-inline-end;
+}
+
+/* توزيع الشرار */
+.nd-neon-spark-one {
+  animation: nd-spark-up 620ms ease-out infinite;
+}
+
+.nd-neon-spark-two {
+  animation: nd-spark-down 700ms ease-out 100ms infinite;
+}
+
+.nd-neon-spark-three {
+  width: 5px;
+  height: 5px;
+  animation: nd-spark-center 540ms ease-out 200ms infinite;
+}
+
+.nd-neon-spark-four {
+  width: 7px;
+  height: 7px;
+  animation: nd-spark-high 780ms ease-out 280ms infinite;
+}
+
+.nd-neon-spark-five {
+  width: 5px;
+  height: 5px;
+  animation: nd-spark-low 650ms ease-out 370ms infinite;
+}
+
+.nd-neon-spark-six {
+  width: 4px;
+  height: 4px;
+  animation: nd-spark-center 460ms ease-out 440ms infinite;
+}
+@keyframes nd-spark-up {
+  0% {
+    inset-inline-end: -2px;
+    transform: translateY(-50%) scale(1.2);
+    opacity: 1;
+  }
+
+  100% {
+    inset-inline-end: -18px;
+    transform: translateY(-18px) scale(0.2);
+    opacity: 0;
+  }
+}
+
+@keyframes nd-spark-down {
+  0% {
+    inset-inline-end: -2px;
+    transform: translateY(-50%) scale(1.2);
+    opacity: 1;
+  }
+
+  100% {
+    inset-inline-end: -17px;
+    transform: translateY(14px) scale(0.2);
+    opacity: 0;
+  }
+}
+
+@keyframes nd-spark-center {
+  0% {
+    inset-inline-end: -2px;
+    transform: translateY(-50%) scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    inset-inline-end: -25px;
+    transform: translateY(-50%) scale(0.15);
+    opacity: 0;
+  }
+}
+/* إيقاف الخط والشرار عند اختيار الإجابة */
+.nd-neon-paused .nd-neon-beam,
+.nd-neon-paused .nd-neon-spark {
+  animation-play-state: paused;
+}
+
+/* حركة الخط من الأخضر إلى الذهبي ثم الأحمر */
+@keyframes nd-neon-countdown {
+  0% {
+    width: 100%;
+    color: #7fb069;
+  }
+
+  48% {
+    color: #d1af6f;
+  }
+
+  72% {
+    color: #e78a3b;
+  }
+
+  100% {
+    width: 0%;
+    color: #ef4444;
+  }
+}
+
+/* الشرارة الكبيرة المتجهة للأعلى */
+@keyframes nd-spark-high {
+  0% {
+    inset-inline-end: -2px;
+    transform:
+      translateY(-50%)
+      scale(1.2);
+    opacity: 1;
+  }
+
+  100% {
+    inset-inline-end: -22px;
+    transform:
+      translateY(-21px)
+      scale(0.25);
+    opacity: 0;
+  }
+}
+
+/* الشرارة المتجهة للأسفل */
+@keyframes nd-spark-low {
+  0% {
+    inset-inline-end: -2px;
+    transform:
+      translateY(-50%)
+      scale(1.1);
+    opacity: 1;
+  }
+
+  100% {
+    inset-inline-end: -19px;
+    transform:
+      translateY(17px)
+      scale(0.2);
+    opacity: 0;
+  }
+}

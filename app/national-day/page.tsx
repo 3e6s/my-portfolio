@@ -3,7 +3,7 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Award, Check, ChevronDown, Clock3, Flag, RotateCcw, Sparkles, Trophy, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Award, Check, ChevronDown, Flag, RotateCcw, Sparkles, Trophy, X } from "lucide-react";
 import { ibmPlexArabic, saudiFont } from "../fonts";
 import { gameReducer, INITIAL_STATE, newQuestions, POINTS_PER_ANSWER, QUESTIONS, type Language } from "./quiz";
 import "./national-day.css";
@@ -30,10 +30,11 @@ export default function NationalDayPage() {
   const correctCount = state.answers.filter(a => a.correct).length;
   const timedOutCount = state.answers.filter(a => a.timedOut).length;
   const score = correctCount * POINTS_PER_ANSWER;
-  const maxScore = QUESTIONS.length * POINTS_PER_ANSWER;
-  const [leaders, setLeaders] = useState<LeaderboardEntry[]>([]);
-const [leadersLoading, setLeadersLoading] = useState(true);
-const [leaderboardRefresh, setLeaderboardRefresh] = useState(0);
+  const maxScore = state.questions.length * POINTS_PER_ANSWER;
+  const [leaders, setLeaders] =
+  useState<LeaderboardEntry[]>([]);
+  const [leadersLoading, setLeadersLoading] = useState(true);
+  const [leaderboardRefresh, setLeaderboardRefresh] = useState(0);
   useEffect(() => {
     try {
       const saved = localStorage.getItem("portfolio-language");
@@ -306,9 +307,71 @@ useEffect(() => {
             </div>
             <div className="nd-progress-label"><span>{t("السؤال", "Question")} <bdi>{state.index + 1} / {state.questions.length}</bdi></span><span>{t("كل معلومة تفرق", "Every fact counts")}</span></div>
             <div className="nd-progress" role="progressbar" aria-label={t("الأسئلة المكتملة", "Completed questions")} aria-valuenow={state.answers.length} aria-valuemin={0} aria-valuemax={state.questions.length}><div style={{ width: `${state.answers.length / state.questions.length * 100}%` }} /></div>
-            <div className="nd-card nd-question-card" key={question.id}>
-              <div className="nd-question-top"><span className="nd-kicker">{t("اختر إجابة واحدة", "Choose one answer")}</span><div className={`nd-timer ${state.remaining <= 5 && state.seconds > 0 && !answer ? "nd-timer-urgent" : ""}`} role="timer" aria-label={t("الوقت المتبقي", "Time remaining")}><Clock3 size={17} /><bdi>{state.seconds === 0 ? t("بدون مؤقت", "Untimed") : `${state.remaining} ${t("ث", "s")}`}</bdi></div></div>
-              <h1 tabIndex={-1} ref={titleRef} className="nd-question-title">{question.prompt[language]}</h1>
+         
+<div
+  className="nd-card nd-question-card"
+  key={question.id}
+>
+  <div className="nd-question-top">
+    <span className="nd-kicker">
+      {t(
+        "اختر إجابة واحدة",
+        "Choose one answer"
+      )}
+    </span>
+
+    {state.seconds === 0 && (
+      <span className="nd-untimed">
+        {t("بدون مؤقت", "Untimed")}
+      </span>
+    )}
+  </div>
+
+  {state.seconds > 0 && (
+    <div
+      className={`nd-neon-timer ${
+        answer ? "nd-neon-paused" : ""
+      }`}
+      role="progressbar"
+      aria-label={t(
+        "الوقت المتبقي",
+        "Time remaining"
+      )}
+      aria-valuemin={0}
+      aria-valuemax={state.seconds}
+      aria-valuenow={state.remaining}
+    >
+      <div
+        className="nd-neon-beam"
+        style={{
+          animationDuration: `${state.seconds}s`,
+        }}
+      >
+        {/* الكرة المضيئة */}
+        <span
+          className="nd-neon-head"
+          aria-hidden="true"
+        />
+
+        {/* الشرار */}
+        <span
+          className="nd-neon-spark nd-neon-spark-one"
+          aria-hidden="true"
+        />
+
+        <span
+          className="nd-neon-spark nd-neon-spark-two"
+          aria-hidden="true"
+        />
+
+        <span
+          className="nd-neon-spark nd-neon-spark-three"
+          aria-hidden="true"
+        />
+      </div>
+    </div>
+  )}  
+             <h1 tabIndex={-1} ref={titleRef} className="nd-question-title">{question.prompt[language]}</h1>
               <div className="nd-options">
                 {question.options.map((option, i) => {
                   const isCorrect = !!answer && option.id === question.correctId;
@@ -321,7 +384,7 @@ useEffect(() => {
               {answer && <div className="nd-feedback" role="status">
                 <strong>{answer.correct ? t("إجابة صحيحة! +10 نقاط", "Correct! +10 points") : answer.timedOut ? t("انتهى الوقت، تعلّمها للتحدّي الجاي!", "Time’s up. One to remember for next time!") : t("محاولة جيدة، وهذه المعلومة الصحيحة:", "Good try. Here’s the correct fact:")}</strong>
                 <p>{question.explanation[language]}</p>
-                <a href={question.source} target="_blank" rel="noopener noreferrer">{t("مصدر المعلومة: سعوديبيديا", "Source: Saudipedia (Arabic)")}</a>
+                <a href={question.source} target="_blank" rel="noopener noreferrer"> {t("عرض مصدر المعلومة", "View information source")}</a>
               </div>}
               <div className="nd-question-bottom"><span>{t("تاريخنا يستحق نعرفه.", "Our history is worth knowing.")}</span><button className="nd-primary" type="button" disabled={!answer} onClick={() => dispatch({ type: "NEXT", questionId: question.id, now: Date.now() })}>{state.index === state.questions.length - 1 ? t("شوف نتيجتك", "See your result") : t("السؤال التالي", "Next question")}<HeadingArrow size={17} /></button></div>
             </div>
