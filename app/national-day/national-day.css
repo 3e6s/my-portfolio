@@ -161,7 +161,8 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.06);
 }
-/* خط النيون — إضاءة أخف */
+
+/* خط النيون */
 .nd-neon-beam {
   position: absolute;
   inset-block: 1px;
@@ -171,8 +172,9 @@
   color: #7fb069;
   background: currentColor;
   box-shadow:
-    0 0 3px currentColor,
-    0 0 7px currentColor;
+    0 0 5px currentColor,
+    0 0 12px currentColor,
+    0 0 22px currentColor;
 
   animation-name: nd-neon-countdown;
   animation-timing-function: linear;
@@ -181,125 +183,70 @@
   will-change: width, color;
 }
 
-/* الكرة — واضحة ولكن بإضاءة أخف */
+/* الكرة الموجودة في مقدمة الخط */
 .nd-neon-head {
   position: absolute;
-  z-index: 4;
-  inset-inline-end: -8px;
+  z-index: 3;
+  inset-inline-end: -7px;
   top: 50%;
-  width: 17px;
-  height: 17px;
+  width: 15px;
+  height: 15px;
   transform: translateY(-50%);
   border: 3px solid currentColor;
   border-radius: 50%;
   background: #f8fff9;
   box-shadow:
-    0 0 4px currentColor,
-    0 0 9px currentColor;
+    0 0 6px currentColor,
+    0 0 14px currentColor,
+    0 0 26px currentColor;
 }
 
-/* شكل الشرارة */
+/* الشرار */
 .nd-neon-spark {
   position: absolute;
-  z-index: 5;
-  inset-inline-end: -4px;
+  z-index: 2;
+  inset-inline-end: -3px;
   top: 50%;
-  width: 6px;
-  height: 6px;
-  border: 1px solid currentColor;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
-  background: #ffffff;
+  background: currentColor;
   box-shadow:
-    0 0 3px #ffffff,
-    0 0 7px currentColor;
-
+    0 0 5px currentColor,
+    0 0 10px currentColor;
   pointer-events: none;
-  will-change:
-    transform,
-    opacity,
-    inset-inline-end;
 }
 
-/* توزيع الشرار */
 .nd-neon-spark-one {
-  animation: nd-spark-up 620ms ease-out infinite;
+  animation: nd-spark-up 520ms ease-out 0ms infinite;
 }
 
 .nd-neon-spark-two {
-  animation: nd-spark-down 700ms ease-out 100ms infinite;
+  animation: nd-spark-down 680ms ease-out -120ms infinite;
 }
 
 .nd-neon-spark-three {
-  width: 5px;
-  height: 5px;
-  animation: nd-spark-center 540ms ease-out 200ms infinite;
+  animation: nd-spark-center 430ms ease-out -220ms infinite;
 }
 
 .nd-neon-spark-four {
-  width: 7px;
-  height: 7px;
-  animation: nd-spark-high 780ms ease-out 280ms infinite;
+  animation: nd-spark-up 760ms ease-out -340ms infinite;
 }
 
 .nd-neon-spark-five {
-  width: 5px;
-  height: 5px;
-  animation: nd-spark-low 650ms ease-out 370ms infinite;
+  animation: nd-spark-down 570ms ease-out -450ms infinite;
 }
 
 .nd-neon-spark-six {
-  width: 4px;
-  height: 4px;
-  animation: nd-spark-center 460ms ease-out 440ms infinite;
+  animation: nd-spark-center 620ms ease-out -560ms infinite;
 }
-@keyframes nd-spark-up {
-  0% {
-    inset-inline-end: -2px;
-    transform: translateY(-50%) scale(1.2);
-    opacity: 1;
-  }
-
-  100% {
-    inset-inline-end: -18px;
-    transform: translateY(-18px) scale(0.2);
-    opacity: 0;
-  }
-}
-
-@keyframes nd-spark-down {
-  0% {
-    inset-inline-end: -2px;
-    transform: translateY(-50%) scale(1.2);
-    opacity: 1;
-  }
-
-  100% {
-    inset-inline-end: -17px;
-    transform: translateY(14px) scale(0.2);
-    opacity: 0;
-  }
-}
-
-@keyframes nd-spark-center {
-  0% {
-    inset-inline-end: -2px;
-    transform: translateY(-50%) scale(1);
-    opacity: 1;
-  }
-
-  100% {
-    inset-inline-end: -25px;
-    transform: translateY(-50%) scale(0.15);
-    opacity: 0;
-  }
-}
-/* إيقاف الخط والشرار عند اختيار الإجابة */
+/* إيقاف المؤقت والشرار بعد اختيار الإجابة */
 .nd-neon-paused .nd-neon-beam,
 .nd-neon-paused .nd-neon-spark {
   animation-play-state: paused;
 }
 
-/* حركة الخط من الأخضر إلى الذهبي ثم الأحمر */
+/* حركة الخط وتدرج اللون */
 @keyframes nd-neon-countdown {
   0% {
     width: 100%;
@@ -320,40 +267,58 @@
   }
 }
 
-/* الشرارة الكبيرة المتجهة للأعلى */
-@keyframes nd-spark-high {
+/* شرارة للأعلى */
+@keyframes nd-spark-up {
   0% {
     inset-inline-end: -2px;
-    transform:
-      translateY(-50%)
-      scale(1.2);
+    transform: translateY(-50%) scale(1);
     opacity: 1;
   }
 
   100% {
-    inset-inline-end: -22px;
-    transform:
-      translateY(-21px)
-      scale(0.25);
+    inset-inline-end: -15px;
+    transform: translateY(-15px) scale(0);
     opacity: 0;
   }
 }
 
-/* الشرارة المتجهة للأسفل */
-@keyframes nd-spark-low {
+/* شرارة للأسفل */
+@keyframes nd-spark-down {
   0% {
     inset-inline-end: -2px;
-    transform:
-      translateY(-50%)
-      scale(1.1);
+    transform: translateY(-50%) scale(1);
     opacity: 1;
   }
 
   100% {
-    inset-inline-end: -19px;
-    transform:
-      translateY(17px)
-      scale(0.2);
+    inset-inline-end: -13px;
+    transform: translateY(10px) scale(0);
     opacity: 0;
   }
+}
+
+/* شرارة مستقيمة */
+@keyframes nd-spark-center {
+  0% {
+    inset-inline-end: -2px;
+    transform: translateY(-50%) scale(1);
+    opacity: 0.9;
+  }
+
+  100% {
+    inset-inline-end: -20px;
+    transform: translateY(-50%) scale(0);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nd-neon-spark {
+    display: none;
+  }
+}
+
+.nd-untimed {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
 }
